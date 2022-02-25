@@ -6,7 +6,7 @@ using matrix = matrix_t<double>;
 using vec = vector<double>;
 using lu = lu_t<double>;
 
-matrix obr(lu lu_a, size_t n) {
+matrix inv_matrix(lu lu_a, size_t n) {
     matrix res(n);
     for (size_t i = 0; i < n; ++i) {
         vec b(n);
@@ -20,15 +20,13 @@ matrix obr(lu lu_a, size_t n) {
 }
 
 int main() {
-    cout.precision(12);
+    cout.precision(6);
     cout << fixed;
     int n;
     cin >> n;
     matrix a(n);
     cin >> a;
     lu lu_a(a);
-    cout << "Обратная матрица:" << endl;
-    cout << obr(lu_a, n) << endl;
     vec b(n);
     for (int i = 0; i < n; ++i) {
         cin >> b[i];
@@ -38,4 +36,7 @@ int main() {
     for (int i = 0; i < n; ++i) {
         cout << "x" << i + 1 << " = " << x[i] << endl;
     }
+    cout << "Определитель матрицы: " << lu_a.det() << endl;
+    cout << "Обратная матрица:" << endl;
+    cout << inv_matrix(lu_a, n) << endl;
 }

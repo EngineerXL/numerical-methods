@@ -1,3 +1,6 @@
+#ifndef LU_HPP
+#define LU_HPP
+
 #include "matrix.hpp"
 
 #include <algorithm>
@@ -97,3 +100,5 @@ public:
 
     ~lu_t() = default;
 };
+
+#endif /* LU_HPP */
