@@ -48,7 +48,7 @@ private:
                 }
             }
         }
-        _det = 1;
+        _det = (swaps.size() & 1 ? -1 : 1);
         for (size_t i = 0; i < n; ++i) {
             _det *= u[i][i];
         }
