@@ -5,13 +5,36 @@
 #include <vector>
 
 template<class T>
+std::vector<T> operator + (const std::vector<T> & a, const std::vector<T> & b) {
+    size_t n = a.size();
+    std::vector<T> c(n);
+    for (size_t i = 0; i < n; ++i) {
+        c[i] = a[i] + b[i];
+    }
+    return c;
+}
+
+template<class T>
+std::vector<T> operator - (const std::vector<T> & a, const std::vector<T> & b) {
+    size_t n = a.size();
+    std::vector<T> c(n);
+    for (size_t i = 0; i < n; ++i) {
+        c[i] = a[i] - b[i];
+    }
+    return c;
+}
+
+template<class T>
 class matrix_t {
 private:
-    std::vector< std::vector<T> > _data;
+    using matrix = matrix_t<T>;
+    using vec = std::vector<T>;
+
+    std::vector<vec> _data;
     size_t _size;
 public:
     matrix_t(size_t n, bool identity = false) : _size(n) {
-        _data.resize(_size, std::vector<T>(_size));
+        _data.resize(_size, vec(_size));
         if (identity) {
             for (size_t i = 0; i < _size; ++i) {
                 _data[i][i] = 1;
@@ -41,40 +64,55 @@ public:
         }
     }
 
-    friend matrix_t<T> operator * (const matrix_t<T> & a, const matrix_t<T> & b) {
+    friend vec operator * (const matrix & a, const vec & b) {
         size_t n = a.size();
-        matrix_t<T> res(n);
+        vec c(n);
+        for (size_t i = 0; i < n; ++i) {
+            for (size_t j = 0; j < n; ++j) {
+                c[i] += a[i][j] * b[j];
+            }
+        }
+        return c;
+    }
+
+    friend matrix operator * (const matrix & a, const matrix & b) {
+        size_t n = a.size();
+        matrix res(n);
         for (size_t i = 0; i < n; ++i) {
             for (size_t j = 0; j < n; ++j) {
                 for (size_t k = 0; k < n; ++k) {
-                    res._data[i][j] += a._data[i][k] * b._data[k][j];
+                    res[i][j] += a[i][k] * b[k][j];
                 }
             }
         }
         return res;
     }
 
-    std::vector<T> & operator [] (size_t i) {
+    vec & operator [] (size_t i) {
         return _data[i];
     }
 
-    friend std::ostream & operator << (std::ostream & out, const matrix_t<T> & matr) {
+    const vec & operator [] (size_t i) const {
+        return _data[i];
+    }
+
+    friend std::ostream & operator << (std::ostream & out, const matrix & matr) {
         for (size_t i = 0; i < matr.size(); ++i) {
             for (size_t j = 0; j < matr.size(); ++j) {
                 if (j) {
                     out << ", ";
                 }
-                out << matr._data[i][j];
+                out << matr[i][j];
             }
             out << '\n';
         }
         return out;
     }
 
-    friend std::istream & operator >> (std::istream & in, matrix_t<T> & matr) {
+    friend std::istream & operator >> (std::istream & in, matrix & matr) {
         for (size_t i = 0; i < matr.size(); ++i) {
             for (size_t j = 0; j < matr.size(); ++j) {
-                in >> matr._data[i][j];
+                in >> matr[i][j];
             }
         }
         return in;

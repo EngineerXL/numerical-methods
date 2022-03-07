@@ -1,7 +1,7 @@
 #ifndef LU_HPP
 #define LU_HPP
 
-#include "matrix.hpp"
+#include "../matrix.hpp"
 
 #include <algorithm>
 #include <cmath>
