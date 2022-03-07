@@ -22,15 +22,19 @@ public:
     static double norm(matrix & m) {
         double res = -INF;
         for (size_t i = 0; i < m.size(); ++i) {
-            res = std::max(res, norm(m[i]));
+            double s = 0;
+            for (double elem : m[i]) {
+                s += std::abs(elem);
+            }
+            res = std::max(res, s);
         }
         return res;
     }
 
     static double norm(const vec & v) {
-        double res = 0;
+        double res = -INF;
         for (double elem : v) {
-            res += std::abs(elem);
+            res = std::max(res, std::abs(elem));
         }
         return res;
     }
