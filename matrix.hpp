@@ -64,6 +64,16 @@ public:
         }
     }
 
+    matrix t() {
+        matrix_t<T> res(*this);
+        for (size_t i = 0; i < _size; ++i) {
+            for (size_t j = i + 1; j < _size; ++j) {
+                std::swap(res[i][j], res[j][i]);
+            }
+        }
+        return res;
+    }
+
     friend vec operator * (const matrix & a, const vec & b) {
         size_t n = a.size();
         vec c(n);

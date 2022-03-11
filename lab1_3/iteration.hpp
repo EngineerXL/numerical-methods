@@ -19,7 +19,7 @@ public:
 
     iter_solver(const matrix & _a, double _eps = 1e-6) : a(_a), n(_a.size()), eps(_eps) {}
 
-    static double norm(matrix & m) {
+    static double norm(const matrix & m) {
         double res = -INF;
         for (size_t i = 0; i < m.size(); ++i) {
             double s = 0;
