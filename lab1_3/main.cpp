@@ -6,12 +6,11 @@ using matrix = matrix_t<double>;
 using vec = vector<double>;
 
 int main() {
-    int acc = 12;
-    double eps = pow(10, -acc);
-    cout.precision(acc);
+    cout.precision(6);
     cout << fixed;
     int n;
-    cin >> n;
+    double eps;
+    cin >> n >> eps;
     matrix a(n);
     cin >> a;
     iter_solver my_solver(a, eps);
