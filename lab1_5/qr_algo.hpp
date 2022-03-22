@@ -13,6 +13,8 @@ private:
     using pcc = std::pair<complex, complex>;
     using vec_complex = std::vector<complex>;
 
+    static constexpr double INF = 1e18;
+
     size_t n;
     matrix a;
     double eps;
@@ -93,6 +95,7 @@ private:
                 complex l1 = roots.first;
                 complex l2 = roots.second;
                 if (std::isnan(l1.real())) {
+                    eigen[i] = INF;
                     continue;
                 }
                 eigen[i] = l1;

@@ -9,7 +9,7 @@ private:
     using matrix = matrix_t<double>;
     using vec = std::vector<double>;
 
-    const double GLOBAL_EPS = 1e-9;
+    static constexpr double GLOBAL_EPS = 1e-9;
 
     size_t n;
     matrix a;
