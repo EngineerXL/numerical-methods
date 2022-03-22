@@ -74,6 +74,39 @@ public:
         return res;
     }
 
+    friend matrix operator + (const matrix & a, const matrix & b) {
+        size_t n = a.size();
+        matrix res(n);
+        for (size_t i = 0; i < n; ++i) {
+            for (size_t j = 0; j < n; ++j) {
+                res[i][j] = a[i][j] + b[i][j];
+            }
+        }
+        return res;
+    }
+
+    friend matrix operator - (const matrix & a, const matrix & b) {
+        size_t n = a.size();
+        matrix res(n);
+        for (size_t i = 0; i < n; ++i) {
+            for (size_t j = 0; j < n; ++j) {
+                res[i][j] = a[i][j] - b[i][j];
+            }
+        }
+        return res;
+    }
+
+    friend matrix operator * (T lambda, const matrix & a) {
+        size_t n = a.size();
+        matrix res(n);
+        for (size_t i = 0; i < n; ++i) {
+            for (size_t j = 0; j < n; ++j) {
+                res[i][j] = lambda * a[i][j];
+            }
+        }
+        return res;
+    }
+
     friend vec operator * (const matrix & a, const vec & b) {
         size_t n = a.size();
         vec c(n);
