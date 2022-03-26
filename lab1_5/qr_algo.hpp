@@ -122,7 +122,9 @@ private:
     }
 
     void build() {
+        iter_count = 0;
         while (!check_eps()) {
+            ++iter_count;
             matrix q(n, true);
             matrix r(a);
             for (size_t i = 0; i < n - 1; ++i) {
