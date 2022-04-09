@@ -36,37 +36,37 @@ private:
     vec x;
     vec y;
     size_t n;
-    using vint = std::vector<int>;
+    using vvd = std::vector< std::vector<double> >;
+    using vvb = std::vector< std::vector<bool> >;
+    vvd memo;
+    vvb calc;
 
-    double f(vint bits) {
-        std::vector<size_t> ids;
-        for (size_t i = 0; i < n; ++i) {
-            if (bits[i]) {
-                ids.push_back(i);
-            }
+    double f(int l, int r) {
+        if (calc[l][r]) {
+            return memo[l][r];
         }
-        size_t id0 = ids[0], idn = ids.back();
-        if (ids.size() > 2) {
-            vint l_bits(bits), r_bits(bits);
-            l_bits[id0] ^= 1;
-            r_bits[idn] ^= 1;
-            return (f(r_bits) - f(l_bits)) / (x[id0] - x[idn]);
+        calc[l][r] = true;
+        double res;
+        if (l + 1 == r) {
+            res = (y[l] - y[r]) / (x[l] - x[r]);
         } else {
-            return (y[id0] - y[idn]) / (x[id0] - x[idn]);
+            res = (f(l, r - 1) - f(l + 1, r)) / (x[l] - x[r]);
         }
+        return memo[l][r] = res;
     }
 
 public:
-    inter_newton(const vec & _x, const vec & _y) : x(_x), y(_y), n(x.size()) {};
+    inter_newton(const vec & _x, const vec & _y) : x(_x), y(_y), n(x.size()) {
+        memo.resize(n, std::vector<double>(n));
+        calc.resize(n, std::vector<bool>(n));
+    };
 
     polynom operator () () {
         polynom res(vec({y[0]}));
         polynom li(vec({-x[0], 1}));
-        vint mask(n);
-        mask[0] ^= 1;
+        int r = 0;
         for (size_t i = 1; i < n; ++i) {
-            mask[i] ^= 1;
-            res = res + f(mask) * li;
+            res = res + f(0, ++r) * li;
             li = li * polynom(vec({-x[i], 1}));
         }
         return res;
