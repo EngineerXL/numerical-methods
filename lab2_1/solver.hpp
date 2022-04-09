@@ -26,10 +26,10 @@ double iter_solve(double l, double r, double eps) {
     double x_k = r;
     double dx = 1;
     double q = std::max(std::abs(phi_s(l)), std::abs(phi_s(r)));
-    double delta_coef = q / (1 - q);
+    double eps_coef = q / (1 - q);
     do {
         double x_k1 = phi(x_k);
-        dx = delta_coef * std::abs(x_k1 - x_k);
+        dx = eps_coef * std::abs(x_k1 - x_k);
         ++iter_count;
         x_k = x_k1;
     } while (dx > eps);

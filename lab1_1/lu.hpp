@@ -98,6 +98,19 @@ public:
         return x;
     }
 
+    static matrix inv_matrix(lu_t<T> lu_a, size_t n) {
+        matrix res(n);
+        for (size_t i = 0; i < n; ++i) {
+            vec b(n);
+            b[i] = 1;
+            vec x = lu_a.solve(b);
+            for (size_t j = 0; j < n; ++j) {
+                res[j][i] = x[j];
+            }
+        }
+        return res;
+    }
+
     ~lu_t() = default;
 };
 

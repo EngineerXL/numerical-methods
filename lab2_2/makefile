@@ -5,10 +5,6 @@ FLAGS_G++ = -g -pedantic -std=c++17 -Wall -Wextra -Werror
 compile: main.cpp
 	g++ $(FLAGS_G++) main.cpp -o solution
 
-# Compile benchmark
-bench: benchmark.cpp
-	g++ $(FLAGS_G++) benchmark.cpp -o solution
-
 # Compile solution for answer generation
 correct: main.cpp
 	g++ $(FLAGS_G++) main.cpp -o correct
@@ -28,11 +24,11 @@ new: clean
 
 # Check solution
 check: compile
-	bash scripts/checker.sh 10
+	bash scripts/checker.sh
 
 # Check solution with valgrind
 vcheck: compile
-	bash scripts/vchecker.sh 10
+	bash scripts/vchecker.sh
 
 # Run solution
 run: compile
@@ -44,12 +40,12 @@ vrun: compile
 
 # Generate tests
 test: test_gen.py
-	bash scripts/generate_tests.sh 10
+	bash scripts/generate_tests.sh
 	python3 test_gen.py
 
 # Generate answers based on tests and curent solution
 ans:
-	bash scripts/gen_ans.sh 10
+	bash scripts/gen_ans.sh
 
 # Generate tests and run check
 test_check: test check

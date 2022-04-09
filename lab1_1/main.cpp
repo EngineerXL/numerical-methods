@@ -6,19 +6,6 @@ using matrix = matrix_t<double>;
 using vec = vector<double>;
 using lu = lu_t<double>;
 
-matrix inv_matrix(lu lu_a, size_t n) {
-    matrix res(n);
-    for (size_t i = 0; i < n; ++i) {
-        vec b(n);
-        b[i] = 1;
-        vec x = lu_a.solve(b);
-        for (size_t j = 0; j < n; ++j) {
-            res[j][i] = x[j];
-        }
-    }
-    return res;
-}
-
 int main() {
     cout.precision(6);
     cout << fixed;
@@ -38,5 +25,5 @@ int main() {
     }
     cout << "Определитель матрицы: " << lu_a.det() << endl;
     cout << "Обратная матрица:" << endl;
-    cout << inv_matrix(lu_a, n) << endl;
+    cout << lu::inv_matrix(lu_a, n);
 }
