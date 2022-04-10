@@ -25,5 +25,5 @@ int main() {
     }
     cout << "Определитель матрицы: " << lu_a.det() << endl;
     cout << "Обратная матрица:" << endl;
-    cout << lu::inv_matrix(lu_a, n);
+    cout << lu_a.inv_matrix();
 }
