@@ -1,6 +1,7 @@
 #ifndef TRIDIAG_HPP
 #define TRIDIAG_HPP
 
+#include <exception>
 #include <iostream>
 #include <vector>
 
@@ -18,6 +19,16 @@ private:
 public:
     tridiag_t(const int & _n) : n(_n), a(n), b(n), c(n) {}
 
+    tridiag_t(const vec & _a, const vec & _b, const vec & _c) {
+        if (!(_a.size() == _b.size() and _a.size() == _c.size())) {
+            throw std::invalid_argument("Sizes of a, b, c are invalid");
+        }
+        n = _a.size();
+        a = _a;
+        b = _b;
+        c = _c;
+    }
+
     friend std::istream & operator >> (std::istream & in, tridiag_t<T> & tridiag) {
         in >> tridiag.b[0] >> tridiag.c[0];
         for (int i = 1; i < tridiag.n - 1; ++i) {
@@ -28,6 +39,10 @@ public:
     }
 
     vec solve(const vec & d) {
+        int m = d.size();
+        if (n != m) {
+            throw std::invalid_argument("Size of vector d is invalid");
+        }
         vec p(n);
         p[0] = -c[0] / b[0];
         vec q(n);
