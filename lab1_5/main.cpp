@@ -24,7 +24,7 @@ int main() {
     cin >> a;
     qr_algo qr(a, eps);
     vec_complex lambda = qr.get_eigen_values();
-    cout << "Решение получено за " << qr.iter_count << " шагов" << endl;
+    cout << "Решение получено за " << qr.iter_count << " итераций" << endl;
     cout << "Собственные значения:" << endl;
     for (int i = 0; i < n; ++i) {
         cout << "l_" << i + 1 << " = " << beautify(lambda[i]) << endl;
