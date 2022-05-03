@@ -1,0 +1,90 @@
+\section{Исходный код}
+
+Ниже приведена реализация перемножения чисел в столбик.
+
+\begin{lstlisting}[language=C++]
+std::string slow_mult(const std::string & a, const std::string & b) {
+    size_t n = 4 * std::max(a.size(), b.size());
+    vi res(n);
+    for (size_t i = 0; i < a.size(); ++i) {
+        int64_t ai = a[i] - '0';
+        for (size_t j = 0; j < b.size(); ++j) {
+            int64_t bj = b[j] - '0';
+            res[(b.size() - 1 - j) + (a.size() - 1 - i)] += ai * bj;
+        }
+    }
+    for (size_t i = 0; i < n - 1; ++i) {
+        res[i + 1] += res[i] / BASE;
+        res[i] %= BASE;
+    }
+    while (res.size() > 1 and res.back() == 0) {
+        res.pop_back();
+    }
+    reverse(res.begin(), res.end());
+    std::string ab;
+    for (int64_t elem : res) {
+        ab.push_back('0' + elem);
+    }
+    return ab;
+}
+\end{lstlisting}
+
+Ниже приведён листинг перемножения двух чисел с использованием БПФ.
+
+\begin{lstlisting}[language=C++]
+std::string fft_mult(const std::string & a, const std::string & b) {
+    size_t max_size = std::max(a.size(), b.size());
+    size_t n = 1;
+    while (n < max_size) {
+        n *= 2;
+    }
+    n *= 2;
+    vc fa(n), fb(n);
+    for (size_t i = 0; i < a.size(); ++i) {
+        fa[a.size() - i - 1] = complex(a[i] - '0');
+    }
+    for (size_t i = 0; i < b.size(); ++i) {
+        fb[b.size() - i - 1] = complex(b[i] - '0');
+    }
+    fft(fa, false);
+    fft(fb, false);
+    for (size_t i = 0; i < n; ++i) {
+        fa[i] = fa[i] * fb[i];
+    }
+    fft(fa, true);
+    vi res(n);
+    for (size_t i = 0; i < n; ++i) {
+        res[i] = (int64_t)round(fa[i].real());
+    }
+    for (size_t i = 0; i < n - 1; ++i) {
+        res[i + 1] += res[i] / BASE;
+        res[i] %= BASE;
+    }
+    while (res.size() > 1 and res.back() == 0) {
+        res.pop_back();
+    }
+    reverse(res.begin(), res.end());
+    std::string ab;
+    for (int64_t elem : res) {
+        ab.push_back('0' + elem);
+    }
+    return ab;
+}
+\end{lstlisting}
+
+Листинг основной функции:
+\begin{lstlisting}[language=C++]
+#include "fft_mult.hpp"
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    string a, b;
+    cin >> a >> b;
+    string fft_res = fft_mult(a, b);
+    cout << fft_res << endl;
+}
+\end{lstlisting}
+
+\pagebreak

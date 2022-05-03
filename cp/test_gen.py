@@ -3,7 +3,7 @@ from random import *
 
 TEST_FILE_COUNT = 10
 MIN_A = 1
-MAX_A = 10 ** 10000
+MAX_A = 10 ** 25
 
 for test in range(1, TEST_FILE_COUNT + 1):
     testFile = open("tests/" + str(test) + ".in", "w")

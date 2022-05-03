@@ -35,7 +35,7 @@ class inter_newton {
 private:
     using vvd = std::vector< std::vector<double> >;
     using vvb = std::vector< std::vector<bool> >;
-    
+
     vec x;
     vec y;
     size_t n;

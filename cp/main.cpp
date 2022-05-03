@@ -7,5 +7,5 @@ int main() {
     string a, b;
     cin >> a >> b;
     string fft_res = fft_mult(a, b);
-    cout << fft_res << std::endl;
+    cout << fft_res << endl;
 }
