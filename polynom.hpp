@@ -70,6 +70,7 @@ public:
         return res;
     }
 
+    /* FFT? */
     friend polynom operator * (const polynom & lhs, const polynom & rhs) {
         polynom res(lhs.size() + rhs.size());
         for (size_t i = 0; i < lhs.size(); ++i) {
@@ -82,6 +83,27 @@ public:
             --res.n;
         }
         return res;
+    }
+
+    polynom derivative() {
+        polynom res(n - 1);
+        for (size_t i = 1; i < n; ++i) {
+            res[i - 1] = data[i] * i;
+        }
+        return res;
+    }
+
+    polynom integrate() {
+        polynom res(n + 1);
+        for (size_t i = 1; i < n + 1; ++i) {
+            res.data[i] = data[i - 1] / (double)i;
+        }
+        return res;
+    }
+
+    double integrate(double l, double r) {
+        polynom F = integrate();
+        return F(r) - F(l);
     }
 
     double operator () (double x) {
