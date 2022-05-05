@@ -93,7 +93,8 @@ pdd newton_solve(double x1_0, double x2_0, double eps) {
         double x2 = x_k[1];
         lu jacobi(j(x1, x2));
         vec f_k = {f1(x1, x2), f2(x1, x2)};
-        vec x_k1 = x_k - jacobi.inv_matrix() * f_k;
+        vec delta_x = jacobi.solve(f_k);
+        vec x_k1 = x_k - delta_x;
         dx = norm(x_k1 - x_k);
         ++iter_count;
         x_k = x_k1;

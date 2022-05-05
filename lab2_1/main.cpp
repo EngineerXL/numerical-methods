@@ -12,7 +12,7 @@ int main() {
     root = iter_solve(l, r, eps);
     cout << "x_0 = " << root << endl;
     cout << "Решение методом простой итерации получено за " << iter_count << " итераций" << endl;
-    root = newton_solve(l, eps);
+    root = newton_solve(l, r, eps);
     cout << "x_0 = " << root << endl;
     cout << "Решение методом Ньютона получена за " << iter_count << " итераций" << endl;
 }

@@ -14,9 +14,11 @@ private:
     constexpr static double EPS = 1e-9;
 
 public:
-    polynom(int _n) : data(_n), n(_n) {};
+    polynom() : data(1), n(1) {}
 
-    polynom(const vec & coef) : data(coef), n(data.size()) {};
+    polynom(int _n) : data(_n), n(_n) {}
+
+    polynom(const vec & coef) : data(coef), n(data.size()) {}
 
     size_t size() const {
         return n;
@@ -98,12 +100,15 @@ public:
         for (double elem : poly.data) {
             if (!(std::abs(elem) < EPS)) {
                 if (flag and deg) {
-                    out << " + ";
+                    out << (elem > EPS ? " + " : " - ");
                 }
-                out << elem;
+                out << std::abs(elem);
                 flag = true;
                 if (deg) {
-                    out << " * x ^ " << deg;
+                    out << " * x";
+                    if (deg > 1) {
+                        out << " ^ " << deg;
+                    }
                 }
             }
             ++deg;
