@@ -12,11 +12,19 @@
 $$A(x) = a_0 \cdot + a_1 \cdot x + a_2 \cdot x^2 + a_3 \cdot x^3 + \dots + a_{n - 2} \cdot a ^ {n - 2} + a_{n - 1} \cdot a ^ {n - 1}$$
 Будем считать, что $n$ является степенью двойки. Если это не так, то мы можем дополнить исходный многочлен недостающими членами с нулевыми коэффициентами.
 
-Обозначим $\omega_{n, k}$ --- $k$-й комплексный корень степени $n$ из единицы. Так как $1 = e ^ {2 \pi i}$, то решая уравнение $z ^ n = 1 = e ^ {2 \pi i}$ получим $z_k = e ^ {k \cdot {{2 \pi i} \over {n}}} = \omega_{n, k}$, где $k \in \{0, 1, 2, \dots n - 1 \}$. Обозначим $\omega_n = \omega_{n, 1}$. По свойству степени $\omega_{n, k} = (\omega_n) ^ k$.
+Обозначим $\omega_{n, k}$ --- $k$-й комплексный корень степени $n$ из единицы. Так как $1 = e ^ {2 \pi i}$, то решая уравнение $z ^ n = 1 = e ^ {2 \pi i}$ получим $z_k = e ^ {k \cdot {{2 \pi i} \over {n}}} = \omega_{n, k}$, где $k \in \{0, 1, 2, \dots n - 1 \}$. Обозначим $\omega_n = \omega_{n, 1}$. По свойству степени $\omega_{n, k} = \omega_n ^ k$.
 
 Назовём дискретным преобразованием Фурье многочлена $A(x)$ вектор из $n$ чисел:
 $$ DFT(a_0, a_1, a_2, \dots a_{n - 1}) = ( A(\omega_{n} ^ {0}), A(\omega_{n} ^ {1}), A(\omega_{n} ^ {2}), \dots A(\omega_{n} ^ {n - 1}) ) ^ T = (y_0, y_1, y_2, \dots y_{n - 1}) ^ T $$
-Можно записать в матричном виде:
+Заметим, что для $\omega_{n} ^ {k}$ значение многочлена равно:
+\begin{equation*}
+    \begin{split}
+        A(\omega_{n} ^ {k}) & = a_0 \cdot (\omega_{n} ^ {k}) ^ {0} + a_1 \cdot (\omega_{n} ^ {k}) ^ {1} + a_2 \cdot (\omega_{n} ^ {k}) ^ {2} + a_3 \cdot (\omega_{n} ^ {k}) ^ {3} + \dots + a_{n - 1} \cdot (\omega_{n} ^ {k}) ^ {n - 1} = \\
+        & = a_0 \cdot \omega_{n} ^ {0} + a_1 \cdot \omega_{n} ^ {k} + a_2 \cdot \omega_{n} ^ {2 \cdot k} + a_3 \cdot \omega_{n} ^ {3 \cdot k} + \dots + a_{n - 1} \cdot \omega_{n} ^ {(n - 1) \cdot k}
+    \end{split}
+\end{equation*}
+
+Тогда преобразование можно записать в матричном виде:
 $$ DFT(a_0, a_1, a_2, \dots a_{n - 1}) =
 \begin{pmatrix}
 y_0 \\
@@ -35,13 +43,16 @@ a_{n - 1} \\
 \end{pmatrix}
 $$
 Здесь $W$ --- матрица Вандермонда:
-$$ W = \begin{pmatrix}
-{\omega}_{n} ^ {0} & {\omega}_{n} ^ {0} & {\omega}_{n} ^ {0} & \dots & {\omega}_{n} ^ {0} \\
-{\omega}_{n} ^ {1} & {\omega}_{n} ^ {2} & {\omega}_{n} ^ {3} & \dots & {\omega}_{n} ^ {n - 1} \\
-{\omega}_{n} ^ {2} & {\omega}_{n} ^ {4} & {\omega}_{n} ^ {8} & \dots & {\omega}_{n} ^ {2 \cdot (n - 1)} \\
-\dots & \dots & \dots & \dots & \dots \\
-{\omega}_{n} ^ {n - 1} & {\omega}_{n} ^ {2 \cdot (n - 1)} & {\omega}_{n} ^ {3 \cdot (n - 1)} & \dots & {\omega}_{n} ^ {(n - 1) ^ 2}
-\end{pmatrix}$$
+$$ W =
+\begin{pmatrix}
+{\omega}_{n} ^ {0} & {\omega}_{n} ^ {0} & {\omega}_{n} ^ {0} & {\omega}_{n} ^ {0} & \dots & {\omega}_{n} ^ {0} \\
+{\omega}_{n} ^ {0} & {\omega}_{n} ^ {1} & {\omega}_{n} ^ {2} & {\omega}_{n} ^ {3} & \dots & {\omega}_{n} ^ {(n - 1)} \\
+{\omega}_{n} ^ {0} & {\omega}_{n} ^ {2} & {\omega}_{n} ^ {4} & {\omega}_{n} ^ {6} & \dots & {\omega}_{n} ^ {2 \cdot (n - 1)} \\
+{\omega}_{n} ^ {0} & {\omega}_{n} ^ {3} & {\omega}_{n} ^ {6} & {\omega}_{n} ^ {9} & \dots & {\omega}_{n} ^ {3 \cdot (n - 1)} \\
+\dots & \dots & \dots & \dots & \dots & \dots \\
+{\omega}_{n} ^ {0} & {\omega}_{n} ^ {(n - 1)} & {\omega}_{n} ^ {2 \cdot (n - 1)} & {\omega}_{n} ^ {3 \cdot (n - 1)} & \dots & {\omega}_{n} ^ {(n - 1) ^ 2}
+\end{pmatrix}
+$$
 Умножим обе части слева на $W^{-1}$, получим:
 $$
 W^{-1} \cdot
@@ -62,13 +73,16 @@ a_{n - 1} \\
 \end{pmatrix}
 $$
 $W^{-1}$ имеет следующий вид:
-$$ W^{-1} = {1 \over n} \cdot \begin{pmatrix}
-{\omega}_{n} ^ {0} & {\omega}_{n} ^ {0} & {\omega}_{n} ^ {0} & \dots & {\omega}_{n} ^ {0} \\
-{\omega}_{n} ^ {-1} & {\omega}_{n} ^ {-2} & {\omega}_{n} ^ {-3} & \dots & {\omega}_{n} ^ {-(n - 1)} \\
-{\omega}_{n} ^ {-2} & {\omega}_{n} ^ {-4} & {\omega}_{n} ^ {-8} & \dots & {\omega}_{n} ^ {-2 \cdot (n - 1)} \\
-\dots & \dots & \dots & \dots & \dots \\
-{\omega}_{n} ^ {-(n - 1)} & {\omega}_{n} ^ {-2 \cdot (n - 1)} & {\omega}_{n} ^ {-3 \cdot (n - 1)} & \dots & {\omega}_{n} ^ {-(n - 1) ^ 2}
-\end{pmatrix}$$
+$$ W^{-1} = {1 \over n} \cdot
+\begin{pmatrix}
+{\omega}_{n} ^ {0} & {\omega}_{n} ^ {0} & {\omega}_{n} ^ {0} & {\omega}_{n} ^ {0} & \dots & {\omega}_{n} ^ {0} \\
+{\omega}_{n} ^ {0} & {\omega}_{n} ^ {-1} & {\omega}_{n} ^ {-2} & {\omega}_{n} ^ {-3} & \dots & {\omega}_{n} ^ {-(n - 1)} \\
+{\omega}_{n} ^ {0} & {\omega}_{n} ^ {-2} & {\omega}_{n} ^ {-4} & {\omega}_{n} ^ {-6} & \dots & {\omega}_{n} ^ {-2 \cdot (n - 1)} \\
+{\omega}_{n} ^ {0} & {\omega}_{n} ^ {-3} & {\omega}_{n} ^ {-6} & {\omega}_{n} ^ {-9} & \dots & {\omega}_{n} ^ {-3 \cdot (n - 1)} \\
+\dots & \dots & \dots & \dots & \dots & \dots \\
+{\omega}_{n} ^ {0} & {\omega}_{n} ^ {-(n - 1)} & {\omega}_{n} ^ {-2 \cdot (n - 1)} & {\omega}_{n} ^ {-3 \cdot (n - 1)} & \dots & {\omega}_{n} ^ {-(n - 1) ^ 2}
+\end{pmatrix}
+$$
 Определим обратное преобразование Фурье для вектора из $n$ чисел:
 $$
 InverseDFT( y_0, y_1, y_2, \dots y_{n - 1} ) = (a_0, a_1, a_2, \dots a_{n - 1}) ^ T
@@ -109,10 +123,12 @@ $$ A(x) = A_0(x ^ 2) + x \cdot A_1(x ^ 2) $$
 $$ DFT(A_0) = (y^0_0, y^0_1, y^0_2, \dots y^0_{ {n \over 2} - 1}) ^ T $$
 $$ DFT(A_1) = (y^1_0, y^1_1, y^1_2, \dots y^1_{ {n \over 2} - 1}) ^ T $$
 Здесь $y^0$ и $y^1$ --- значения ДПФ для $A_0(x)$ и $A_1(x)$, а не показатели степени при $y$.
+
 Теперь вычислим $DFT(A)$, используя $DFT(A_0)$ и $DFT(A_1)$, используя следующие три важных свойства:
-$$ {\omega^2_{n, k}} = (e ^ {k \cdot {{2 \pi i} \over {n}}}) ^ 2 = e ^ {2 \cdot k \cdot {{2 \pi i} \over {n}}} = e ^ {k \cdot {{2 \pi i} \over {n \over 2}}} = {{\omega}_{{n \over 2}, k}} $$
-$$ {{\omega}_{n, {k + {n \over 2}}}} = e ^ {{(k + {n \over 2})} \cdot {{2 \pi i} \over {n}}} = e ^ {k \cdot {{2 \pi i} \over {n}}} \cdot e ^ {{n \over 2} \cdot {{2 \pi i} \over {n}}} = e ^ {k \cdot {{2 \pi i} \over {n}}} \cdot e ^ {\pi i} = e ^ {k \cdot {{2 \pi i} \over {n}}} \cdot (-1) = -e ^ {k \cdot {{2 \pi i} \over {n}}} = -{{\omega}_{n, k}} $$
-$$ {\omega^2_{n, {k + {n \over 2}}}} = (-{{\omega}_{n, k}}) ^ 2 = {\omega^2_{n, k}} =  {{\omega}_{{n \over 2}, k}}$$
+$${\omega^2_{n, k}} = (e ^ {k \cdot {{2 \pi i} \over {n}}}) ^ 2 = e ^ {2 \cdot k \cdot {{2 \pi i} \over {n}}} = e ^ {k \cdot {{2 \pi i} \over {n \over 2}}} = {{\omega}_{{n \over 2}, k}}$$
+$${{\omega}_{n, {k + {n \over 2}}}} = e ^ {{(k + {n \over 2})} \cdot {{2 \pi i} \over {n}}} = e ^ {k \cdot {{2 \pi i} \over {n}}} \cdot e ^ {{n \over 2} \cdot {{2 \pi i} \over {n}}} = e ^ {k \cdot {{2 \pi i} \over {n}}} \cdot e ^ {\pi i} = e ^ {k \cdot {{2 \pi i} \over {n}}} \cdot (-1) = -e ^ {k \cdot {{2 \pi i} \over {n}}} = -{{\omega}_{n, k}}$$
+$${\omega^2_{n, {k + {n \over 2}}}} = (-{{\omega}_{n, k}}) ^ 2 = {\omega^2_{n, k}} =  {{\omega}_{{n \over 2}, k}}$$
+
 Пусть $k \in \{ 0, 1, 2, \dots {n \over 2} - 1 \}$, тогда, используя первое свойство, получим:
 $$ y_k = A(\omega_{n, k}) = A_0(\omega ^ 2_{n, k}) + \omega_{n, k} \cdot A_1(\omega ^ 2_{n, k}) = A_0({{\omega}_{{n \over 2}, k}}) + \omega_{n, k} \cdot A_1({{\omega}_{{n \over 2}, k}}) $$
 Степени многочленов $A_0(x)$ и $A_1(x)$ равны ${n \over 2} - 1$, значит $y^0_k = A_0({{\omega}_{{n \over 2}, k}})$ и $y^1_k = A_1({{\omega}_{{n \over 2}, k}})$. Подставим в выражение выше, получим:
@@ -122,7 +138,7 @@ $$ y_k = y^0_k + \omega_{n, k} \cdot y^1_k $$
 Используем второе и третье свойства:
 $$ y_{k + {n \over 2}} = A(\omega_{n, {k + {n \over 2}}}) = A_0(\omega ^ 2_{n, {k + {n \over 2}}}) + \omega_{n, {k + {n \over 2}}} \cdot A_1(\omega ^ 2_{n, {k + {n \over 2}}}) = A_0({{\omega}_{{n \over 2}, k}}) - \omega_{n, k} \cdot A_1({{\omega}_{{n \over 2}, k}}) $$
 Подставим $y^0_k$ и $y^1_k$ в выражение:
-$$ y_k = y^0_k - \omega_{n, k} \cdot y^1_k $$
+$$ y_{k + {n \over 2}} = y^0_k - \omega_{n, k} \cdot y^1_k $$
 
 Итак, мы получили $DFT(A)$ с помощью значений $DFT(A_0)$ и $DFT(A_1)$. То есть мы разбили исходную задачу на две поздачи вдвое меньшего размера и, решив их, получили решение исходной задачи. Такая схема называется <<разделяй-и-властвуй>> и имеет известную вычислительную сложность $O(n \cdot \log(n))$.
 
