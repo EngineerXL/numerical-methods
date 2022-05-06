@@ -16,7 +16,7 @@ int main() {
     cin >> l >> r;
     double h1, h2;
     cin >> h1 >> h2;
-    double best = integrate_simp(l, r, 1e-3, f);
+    double best = integrate_trap(l, r, 1e-6, f);
     cout << "Точное значение: " << best << endl;
 
     cout << endl;

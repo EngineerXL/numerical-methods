@@ -17,11 +17,18 @@ private:
 public:
     int iter_count;
 
-    iter_solver(const matrix & _a, double _eps = 1e-6) : a(_a), n(_a.size()), eps(_eps) {}
+    iter_solver(const matrix & _a, double _eps = 1e-6) {
+        if (_a.rows() != _a.cols()) {
+            throw std::invalid_argument("Matrix is not square");
+        }
+        a = matrix(_a);
+        n = a.rows();
+        eps = _eps;
+    }
 
     static double norm(const matrix & m) {
         double res = -INF;
-        for (size_t i = 0; i < m.size(); ++i) {
+        for (size_t i = 0; i < m.rows(); ++i) {
             double s = 0;
             for (double elem : m[i]) {
                 s += std::abs(elem);

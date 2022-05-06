@@ -1,8 +1,8 @@
 #ifndef TABLE_FUNCTION_HPP
 #define TABLE_FUNCTION_HPP
 
-#include <vector>
 #include <exception>
+#include <vector>
 
 class table_function_t {
     using vec = std::vector<double>;

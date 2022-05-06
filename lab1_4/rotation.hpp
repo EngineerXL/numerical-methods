@@ -17,10 +17,9 @@ private:
     matrix v;
 
     static double norm(const matrix & m) {
-        size_t n = m.size();
         double res = 0;
-        for (size_t i = 0; i < n; ++i) {
-            for (size_t j = 0; j < n; ++j) {
+        for (size_t i = 0; i < m.rows(); ++i) {
+            for (size_t j = 0; j < m.cols(); ++j) {
                 if (i == j) {
                     continue;
                 }
@@ -39,7 +38,7 @@ private:
     }
 
     matrix create_rotation(size_t i, size_t j, double phi) {
-        matrix u(n, true);
+        matrix u = matrix::identity(n);
         u[i][i] = std::cos(phi);
         u[i][j] = -std::sin(phi);
         u[j][i] = std::sin(phi);
@@ -73,7 +72,14 @@ private:
 public:
     int iter_count;
 
-    rotation(const matrix & _a, double _eps) : n(_a.size()), a(_a), eps(_eps), v(n, true) {
+    rotation(const matrix & _a, double _eps) {
+        if (_a.rows() != _a.cols()) {
+            throw std::invalid_argument("Matrix is not square");
+        }
+        a = matrix(_a);
+        n = a.rows();
+        eps = _eps;
+        v = matrix::identity(n);
         build();
     };
 

@@ -23,7 +23,7 @@ int main() {
     for (int i = 0; i < n; ++i) {
         cout << "x" << i + 1 << " = " << x[i] << endl;
     }
-    cout << "Определитель матрицы: " << lu_a.det() << endl;
+    cout << "Определитель матрицы: " << lu_a.get_det() << endl;
     cout << "Обратная матрица:" << endl;
     cout << lu_a.inv_matrix();
 }

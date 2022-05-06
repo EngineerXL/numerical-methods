@@ -57,7 +57,7 @@ private:
     matrix householder(const vec & b, int id) {
         vec v(b);
         v[id] += sign(b[id]) * norm(b);
-        return matrix(n, true) - (2.0 / vtv(v)) * vvt(v);
+        return matrix::identity(n) - (2.0 / vtv(v)) * vvt(v);
     }
 
     pcc solve_sq(double a11, double a12, double a21, double a22) {
@@ -94,7 +94,9 @@ private:
             if (i < n - 1 and !(abs(a[i + 1][i]) < eps)) {
                 auto [l1, l2] = solve_sq(a[i][i], a[i][i + 1], a[i + 1][i], a[i + 1][i + 1]);
                 if (std::isnan(l1.real())) {
+                    eigen[i] = COMPLEX_INF;
                     ++i;
+                    eigen[i] = COMPLEX_INF;
                     continue;
                 }
                 eigen[i] = l1;
@@ -112,6 +114,10 @@ private:
         vec_complex prev_eigen(eigen);
         calc_eigen();
         for (size_t i = 0; i < n; ++i) {
+            bool bad = (std::norm(eigen[i] - COMPLEX_INF) < eps);
+            if (bad) {
+                return false;
+            }
             double delta = std::norm(eigen[i] - prev_eigen[i]);
             if (delta > eps) {
                 return false;
@@ -124,7 +130,7 @@ private:
         iter_count = 0;
         while (!check_eps()) {
             ++iter_count;
-            matrix q(n, true);
+            matrix q = matrix::identity(n);
             matrix r(a);
             for (size_t i = 0; i < n - 1; ++i) {
                 vec b(n);
@@ -142,8 +148,14 @@ private:
 public:
     int iter_count;
 
-    qr_algo(const matrix & _a, double _eps) :
-            n(_a.size()), a(_a), eps(_eps), eigen(n, COMPLEX_INF) {
+    qr_algo(const matrix & _a, double _eps) {
+        if (_a.rows() != _a.cols()) {
+            throw std::invalid_argument("Matrix is not square");
+        }
+        n = _a.rows();
+        a = matrix(_a);
+        eps = _eps;
+        eigen.resize(n, COMPLEX_INF);
         build();
     };
 

@@ -18,11 +18,11 @@ private:
 
     matrix l;
     matrix u;
-    T _det;
+    T det;
     std::vector<pii> swaps;
 
     void decompose() {
-        size_t n = u.size();
+        size_t n = u.rows();
         for (size_t i = 0; i < n; ++i) {
             size_t max_el_ind = i;
             for (size_t j = i + 1; j < n; ++j) {
@@ -48,9 +48,9 @@ private:
                 }
             }
         }
-        _det = (swaps.size() & 1 ? -1 : 1);
+        det = (swaps.size() & 1 ? -1 : 1);
         for (size_t i = 0; i < n; ++i) {
-            _det *= u[i][i];
+            det *= u[i][i];
         }
     }
 
@@ -60,7 +60,12 @@ private:
         }
     }
 public:
-    lu_t(const matrix & matr) : l(matr.size(), true), u(matr) {
+    lu_t(const matrix & matr) {
+        if (matr.rows() != matr.cols()) {
+            throw std::invalid_argument("Matrix is not square");
+        }
+        l = matrix::identity(matr.rows());
+        u = matrix(matr);
         decompose();
     }
 
@@ -69,8 +74,8 @@ public:
         return out;
     }
 
-    T det() {
-        return _det;
+    T get_det() {
+        return det;
     }
 
     vec solve(vec b) {
@@ -99,11 +104,11 @@ public:
     }
 
     matrix inv_matrix() {
-        size_t n = l.size();
+        size_t n = l.rows();
         matrix res(n);
         for (size_t i = 0; i < n; ++i) {
             vec b(n);
-            b[i] = 1;
+            b[i] = T(1);
             vec x = solve(b);
             for (size_t j = 0; j < n; ++j) {
                 res[j][i] = x[j];
