@@ -1,0 +1,115 @@
+#ifndef SIMPLE_DESOLVE_HPP
+#define SIMPLE_DESOLVE_HPP
+
+#include <functional>
+#include <utility>
+#include <vector>
+
+/* f(x, y, z) */
+using func = std::function<double(double, double, double)>;
+using tddd = std::tuple<double, double, double>;
+using vect = std::vector<tddd>;
+
+class euler {
+private:
+    double l, r;
+    func f, g;
+    double y0, z0;
+
+public:
+    euler(const double _l, const double _r,
+        const func _f, const func _g,
+        const double _y0, const double _z0) : l(_l), r(_r), f(_f), g(_g), y0(_y0), z0(_z0) {}
+
+    vect solve(double h) {
+        vect res;
+        double xk = l;
+        double yk = y0;
+        double zk = z0;
+        while (xk < r) {
+            res.push_back(std::make_tuple(xk, yk, zk));
+            double dy = h * f(xk, yk, zk);
+            double dz = h * g(xk, yk, zk);
+            xk += h;
+            yk += dy;
+            zk += dz;
+        }
+        return res;
+    }
+};
+
+class runge {
+private:
+    double l, r;
+    func f, g;
+    double y0, z0;
+
+public:
+    runge(const double _l, const double _r,
+        const func _f, const func _g,
+        const double _y0, const double _z0) : l(_l), r(_r), f(_f), g(_g), y0(_y0), z0(_z0) {}
+
+    vect solve(double h) {
+        vect res;
+        double xk = l;
+        double yk = y0;
+        double zk = z0;
+        while (xk < r) {
+            res.push_back(std::make_tuple(xk, yk, zk));
+            double K1 = h * f(xk, yk, zk);
+            double L1 = h * g(xk, yk, zk);
+            double K2 = h * f(xk + 0.5 * h, yk + 0.5 * K1, zk + 0.5 * L1);
+            double L2 = h * g(xk + 0.5 * h, yk + 0.5 * K1, zk + 0.5 * L1);
+            double K3 = h * f(xk + 0.5 * h, yk + 0.5 * K2, zk + 0.5 * L2);
+            double L3 = h * g(xk + 0.5 * h, yk + 0.5 * K2, zk + 0.5 * L2);
+            double K4 = h * f(xk + h, yk + K3, zk + L3);
+            double L4 = h * g(xk + h, yk + K3, zk + L3);
+            double dy = (K1 + 2.0 * K2 + 2.0 * K3 + K4) / 6.0;
+            double dz = (L1 + 2.0 * L2 + 2.0 * L3 + L4) / 6.0;
+            xk += h;
+            yk += dy;
+            zk += dz;
+        }
+        return res;
+    }
+};
+
+class adams {
+private:
+    double l, r;
+    func f, g;
+    double y0, z0;
+
+public:
+    adams(const double _l, const double _r,
+        const func _f, const func _g,
+        const double _y0, const double _z0) : l(_l), r(_r), f(_f), g(_g), y0(_y0), z0(_z0) {}
+
+    double calc_tuple(func f, tddd xyz) {
+        return f(std::get<0>(xyz), std::get<1>(xyz), std::get<2>(xyz));
+    }
+
+    vect solve(double h) {
+        if (l + 4 * h > r) {
+            throw std::invalid_argument("h is too big");
+        }
+        runge first_points(l, l + 4 * h, f, g, y0, z0);
+        vect res = first_points.solve(h);
+        size_t cnt = res.size();
+        double xk = std::get<0>(res.back());
+        double yk = std::get<1>(res.back());
+        double zk = std::get<2>(res.back());
+        while (xk + h < r) {
+            double dy = h * (55 * calc_tuple(f, res[cnt - 1]) - 59 * calc_tuple(f, res[cnt - 2]) + 37 * calc_tuple(f, res[cnt - 3]) - 9 * calc_tuple(f, res[cnt - 4])) / 24.0;
+            double dz = h * (55 * calc_tuple(g, res[cnt - 1]) - 59 * calc_tuple(g, res[cnt - 2]) + 37 * calc_tuple(g, res[cnt - 3]) - 9 * calc_tuple(g, res[cnt - 4])) / 24.0;
+            xk += h;
+            yk += dy;
+            zk += dz;
+            ++cnt;
+            res.push_back(std::make_tuple(xk, yk, zk));
+        }
+        return res;
+    }
+};
+
+#endif /* SIMPLE_DESOLVE_HPP */
