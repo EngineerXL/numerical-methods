@@ -10,6 +10,12 @@ using func = std::function<double(double, double, double)>;
 using tddd = std::tuple<double, double, double>;
 using vect = std::vector<tddd>;
 
+const double EPS = 1e-9;
+
+bool leq(double a, double b) {
+    return (a < b) or (std::abs(b - a) < EPS);
+}
+
 class euler {
 private:
     double l, r;
@@ -26,13 +32,14 @@ public:
         double xk = l;
         double yk = y0;
         double zk = z0;
-        while (xk < r) {
-            res.push_back(std::make_tuple(xk, yk, zk));
+        res.push_back(std::make_tuple(xk, yk, zk));
+        while (leq(xk + h, r)) {
             double dy = h * f(xk, yk, zk);
             double dz = h * g(xk, yk, zk);
             xk += h;
             yk += dy;
             zk += dz;
+            res.push_back(std::make_tuple(xk, yk, zk));
         }
         return res;
     }
@@ -54,8 +61,8 @@ public:
         double xk = l;
         double yk = y0;
         double zk = z0;
-        while (xk < r) {
-            res.push_back(std::make_tuple(xk, yk, zk));
+        res.push_back(std::make_tuple(xk, yk, zk));
+        while (leq(xk + h, r)) {
             double K1 = h * f(xk, yk, zk);
             double L1 = h * g(xk, yk, zk);
             double K2 = h * f(xk + 0.5 * h, yk + 0.5 * K1, zk + 0.5 * L1);
@@ -69,6 +76,7 @@ public:
             xk += h;
             yk += dy;
             zk += dz;
+            res.push_back(std::make_tuple(xk, yk, zk));
         }
         return res;
     }
@@ -99,14 +107,14 @@ public:
         double xk = std::get<0>(res.back());
         double yk = std::get<1>(res.back());
         double zk = std::get<2>(res.back());
-        while (xk + h < r) {
+        while (leq(xk + h, r)) {
             double dy = h * (55 * calc_tuple(f, res[cnt - 1]) - 59 * calc_tuple(f, res[cnt - 2]) + 37 * calc_tuple(f, res[cnt - 3]) - 9 * calc_tuple(f, res[cnt - 4])) / 24.0;
             double dz = h * (55 * calc_tuple(g, res[cnt - 1]) - 59 * calc_tuple(g, res[cnt - 2]) + 37 * calc_tuple(g, res[cnt - 3]) - 9 * calc_tuple(g, res[cnt - 4])) / 24.0;
             xk += h;
             yk += dy;
             zk += dz;
-            ++cnt;
             res.push_back(std::make_tuple(xk, yk, zk));
+            ++cnt;
         }
         return res;
     }
