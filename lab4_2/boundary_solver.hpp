@@ -2,13 +2,8 @@
 #define BOUNDARY_SOLVER_HPP
 
 #include <cmath>
-#include "../lab4_1/simple_desolve.hpp"
 #include "../lab1_2/tridiag.hpp"
-
-/* f(x, y, z) */
-using func = std::function<double(double, double, double)>;
-using tddd = std::tuple<double, double, double>;
-using vect = std::vector<tddd>;
+#include "../lab4_1/simple_desolve.hpp"
 
 class shooting {
 private:
@@ -66,7 +61,6 @@ public:
 class fin_dif {
 private:
     using fx = std::function<double(double)>;
-    using vec = std::vector<double>;
     using tridiag = tridiag_t<double>;
 
     double a, b;

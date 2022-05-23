@@ -27,25 +27,6 @@ double fx(double x) {
 
 using tddd = tuple<double, double, double>;
 
-void print_data(const vector<tddd> & v) {
-    cout << "x = [";
-    for (size_t i = 0; i < v.size(); ++i) {
-        if (i) {
-            cout << ", ";
-        }
-        cout << get<0>(v[i]);
-    }
-    cout << "]\n";
-    cout << "y = [";
-    for (size_t i = 0; i < v.size(); ++i) {
-        if (i) {
-            cout << ", ";
-        }
-        cout << get<1>(v[i]);
-    }
-    cout << "]\n";
-}
-
 int main() {
     cout.precision(6);
     cout << fixed;
@@ -64,9 +45,15 @@ int main() {
     vector<tddd> sol_shooting = de_shooting.solve(h, eps);
     cout << "Метод стрельбы:" << endl;
     print_data(sol_shooting);
+    cout << "Погрешность вычислений:" << endl;
+    vector<double> shooting_err = runge_romberg(de_shooting.solve(h, eps), de_shooting.solve(h / 2, eps), 4);
+    print_err(shooting_err);
 
     fin_dif de_fin_dif(a, b, px, qx, fx, alpha, beta, y0, delta, gamma, y1);
     vector<tddd> sol_fin_dif = de_fin_dif.solve(h);
     cout << "Конечно-разностный метод:" << endl;
     print_data(sol_fin_dif);
+    cout << "Погрешность вычислений:" << endl;
+    vector<double> fin_dif_err = runge_romberg(de_fin_dif.solve(h), de_fin_dif.solve(h / 2), 2);
+    print_err(fin_dif_err);
 }

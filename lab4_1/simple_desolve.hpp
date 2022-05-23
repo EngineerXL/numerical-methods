@@ -1,14 +1,13 @@
 #ifndef SIMPLE_DESOLVE_HPP
 #define SIMPLE_DESOLVE_HPP
 
+#include "../de_utils.hpp"
 #include <functional>
-#include <utility>
-#include <vector>
 
 /* f(x, y, z) */
 using func = std::function<double(double, double, double)>;
-using tddd = std::tuple<double, double, double>;
 using vect = std::vector<tddd>;
+using vec = std::vector<double>;
 
 const double EPS = 1e-9;
 
@@ -119,5 +118,14 @@ public:
         return res;
     }
 };
+
+vec runge_romberg(const vect & y_2h, const vect & y_h, double p) {
+    double coef = 1.0 / (std::pow(2, p) - 1.0);
+    vec res;
+    for (size_t i = 0; i < y_2h.size(); ++i) {
+        res.push_back(coef * std::abs(std::get<1>(y_2h[i]) - std::get<1>(y_h[2 * i])));
+    }
+    return res;
+}
 
 #endif /* SIMPLE_DESOLVE_HPP */
