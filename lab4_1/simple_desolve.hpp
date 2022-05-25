@@ -97,33 +97,54 @@ public:
     }
 
     vect solve(double h) {
-        if (l + 4 * h > r) {
+        if (l + 3.0 * h > r) {
             throw std::invalid_argument("h is too big");
         }
-        runge first_points(l, l + 4 * h, f, g, y0, z0);
+        runge first_points(l, l + 3.0 * h, f, g, y0, z0);
         vect res = first_points.solve(h);
         size_t cnt = res.size();
         double xk = std::get<0>(res.back());
         double yk = std::get<1>(res.back());
         double zk = std::get<2>(res.back());
         while (leq(xk + h, r)) {
-            double dy = h * (55 * calc_tuple(f, res[cnt - 1]) - 59 * calc_tuple(f, res[cnt - 2]) + 37 * calc_tuple(f, res[cnt - 3]) - 9 * calc_tuple(f, res[cnt - 4])) / 24.0;
-            double dz = h * (55 * calc_tuple(g, res[cnt - 1]) - 59 * calc_tuple(g, res[cnt - 2]) + 37 * calc_tuple(g, res[cnt - 3]) - 9 * calc_tuple(g, res[cnt - 4])) / 24.0;
+            /* Predictor */
+            double dy = (h / 24.0) * (55.0 * calc_tuple(f, res[cnt - 1])
+                                    - 59.0 * calc_tuple(f, res[cnt - 2])
+                                    + 37.0 * calc_tuple(f, res[cnt - 3])
+                                    - 9.0 * calc_tuple(f, res[cnt - 4]));
+            double dz = (h / 24.0) * (55.0 * calc_tuple(g, res[cnt - 1])
+                                    - 59.0 * calc_tuple(g, res[cnt - 2])
+                                    + 37.0 * calc_tuple(g, res[cnt - 3])
+                                    - 9.0 * calc_tuple(g, res[cnt - 4]));
+            double xk1 = xk + h;
+            double yk1 = yk + dy;
+            double zk1 = zk + dz;
+            res.push_back(std::make_tuple(xk1, yk1, zk1));
+            ++cnt;
+            /* Corrector */
+            dy = (h / 24.0) * (9.0 * calc_tuple(f, res[cnt - 1])
+                            + 19.0 * calc_tuple(f, res[cnt - 2])
+                            - 5.0 * calc_tuple(f, res[cnt - 3])
+                            + 1.0 * calc_tuple(f, res[cnt - 4]));
+            dz = (h / 24.0) * (9.0 * calc_tuple(g, res[cnt - 1])
+                            + 19.0 * calc_tuple(g, res[cnt - 2])
+                            - 5.0 * calc_tuple(g, res[cnt - 3])
+                            + 1.0 * calc_tuple(g, res[cnt - 4]));
             xk += h;
             yk += dy;
             zk += dz;
+            res.pop_back();
             res.push_back(std::make_tuple(xk, yk, zk));
-            ++cnt;
         }
         return res;
     }
 };
 
-vec runge_romberg(const vect & y_2h, const vect & y_h, double p) {
+double runge_romberg(const vect & y_2h, const vect & y_h, double p) {
     double coef = 1.0 / (std::pow(2, p) - 1.0);
-    vec res;
+    double res = 0.0;
     for (size_t i = 0; i < y_2h.size(); ++i) {
-        res.push_back(coef * std::abs(std::get<1>(y_2h[i]) - std::get<1>(y_h[2 * i])));
+        res = std::max(res, coef * std::abs(std::get<1>(y_2h[i]) - std::get<1>(y_h[2 * i])));
     }
     return res;
 }

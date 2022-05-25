@@ -25,7 +25,7 @@ public:
         return (y0 - alpha * eta) / beta;
     }
 
-    bool get_eta_next(double eta_prev, double eta, const vect sol_prev, const vect sol) {
+    double get_eta_next(double eta_prev, double eta, const vect sol_prev, const vect sol) {
         double yb_prev = std::get<1>(sol_prev.back());
         double zb_prev = std::get<2>(sol_prev.back());
         double phi_prev = delta * yb_prev + gamma * zb_prev - y1;
@@ -40,11 +40,11 @@ public:
         double eta = 0.8;
         while (1) {
             double runge_z0_prev = get_start_cond(eta_prev);
-            runge de_solver_prev(a, b, f, g, eta_prev, runge_z0_prev);
+            euler de_solver_prev(a, b, f, g, eta_prev, runge_z0_prev);
             vect sol_prev = de_solver_prev.solve(h);
 
             double runge_z0 = get_start_cond(eta);
-            runge de_solver(a, b, f, g, eta, runge_z0);
+            euler de_solver(a, b, f, g, eta, runge_z0);
             vect sol = de_solver.solve(h);
 
             double eta_next = get_eta_next(eta_prev, eta, sol_prev, sol);

@@ -46,14 +46,14 @@ int main() {
     cout << "Метод стрельбы:" << endl;
     print_data(sol_shooting);
     cout << "Погрешность вычислений:" << endl;
-    vector<double> shooting_err = runge_romberg(de_shooting.solve(h, eps), de_shooting.solve(h / 2, eps), 4);
-    print_err(shooting_err);
+    double shooting_err = runge_romberg(de_shooting.solve(h, eps), de_shooting.solve(h / 2, eps), 4);
+    cout << shooting_err << endl;
 
     fin_dif de_fin_dif(a, b, px, qx, fx, alpha, beta, y0, delta, gamma, y1);
     vector<tddd> sol_fin_dif = de_fin_dif.solve(h);
     cout << "Конечно-разностный метод:" << endl;
     print_data(sol_fin_dif);
     cout << "Погрешность вычислений:" << endl;
-    vector<double> fin_dif_err = runge_romberg(de_fin_dif.solve(h), de_fin_dif.solve(h / 2), 2);
-    print_err(fin_dif_err);
+    double fin_dif_err = runge_romberg(de_fin_dif.solve(h), de_fin_dif.solve(h / 2), 2);
+    cout << fin_dif_err << endl;
 }

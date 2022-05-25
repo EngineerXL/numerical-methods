@@ -47,8 +47,8 @@ double integrate_simp(double l, double r, double h, func f) {
     return res;
 }
 
-inline double runge_rombert(double Fh, double Fkh, double k, double p) {
-    return Fh + (Fh - Fkh) / (std::pow(k, p) - 1.0);
+inline double runge_romberg(double Fh, double Fkh, double k, double p) {
+    return (Fh - Fkh) / (std::pow(k, p) - 1.0);
 }
 
 #endif /* INTEGRATE_HPP */

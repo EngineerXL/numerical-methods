@@ -4,6 +4,12 @@
 #include <exception>
 #include <vector>
 
+const double EPS = 1e-9;
+
+bool leq(double a, double b) {
+    return (a < b) or (std::abs(b - a) < EPS);
+}
+
 class table_function_t {
     using vec = std::vector<double>;
     size_t n;
@@ -22,7 +28,8 @@ public:
 
     double derivative1(double x0) {
         for (size_t i = 0; i < n - 2; ++i) {
-            if (x[i] <= x0 and x0 <= x[i + 1]) {
+            /* x in (x_i, x_i+1] */
+            if (x[i] < x0 and leq(x0, x[i + 1])) {
                 double dydx1 = (y[i + 1] - y[i + 0]) / (x[i + 1] - x[i + 0]);
                 double dydx2 = (y[i + 2] - y[i + 1]) / (x[i + 2] - x[i + 1]);
                 double res = dydx1 + (dydx2 - dydx1) * (2.0 * x0 - x[i] - x[i + 1]) / (x[i + 2] - x[i]);
@@ -34,7 +41,8 @@ public:
 
     double derivative2(double x0) {
         for (size_t i = 0; i < n - 2; ++i) {
-            if (x[i] <= x0 and x0 <= x[i + 1]) {
+            /* x in (x_i, x_i+1] */
+            if (x[i] < x0 and leq(x0, x[i + 1])) {
                 double dydx1 = (y[i + 1] - y[i + 0]) / (x[i + 1] - x[i + 0]);
                 double dydx2 = (y[i + 2] - y[i + 1]) / (x[i + 2] - x[i + 1]);
                 double res = 2.0 * (dydx2 - dydx1) / (x[i + 2] - x[i]);

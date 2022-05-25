@@ -3,10 +3,6 @@
 
 using namespace std;
 
-double sample_f(double x) {
-    return x / pow(3 * x + 4, 2);
-}
-
 double f(double x) {
     return (x * x) / (16.0 + x * x);
 }
@@ -16,10 +12,6 @@ int main() {
     cin >> l >> r;
     double h1, h2;
     cin >> h1 >> h2;
-    double best = integrate_trap(l, r, 1e-6, f);
-    cout << "Точное значение: " << best << endl;
-
-    cout << endl;
 
     double rect1 = integrate_rect(l, r, h1, f);
     cout << "Метод прямоугольников с шагом " << h1 << ": " << rect1 << endl;
@@ -39,14 +31,10 @@ int main() {
 
     cout << endl;
 
-    double rect_rr = runge_rombert(rect1, rect2, h2 / h1, 2);
-    cout << "Уточнение метода прямоугольников методом Рунге-Ромберта: " << rect_rr << endl;
-    cout << "Абсолютная ошибка вычислений методов прямоугольников: " << abs(rect_rr - best) << endl;
-    double trap_rr = runge_rombert(trap1, trap2, h2 / h1, 2);
-    cout << "Уточнение метода трапеций методом Рунге-Ромберта: " << trap_rr << endl;
-    cout << "Абсолютная ошибка вычислений методов трапеций: " << abs(trap_rr - best) << endl;
-    double simp_rr = runge_rombert(simp1, simp2, h2 / h1, 2);
-    cout << "Уточнение метода Симпсона методом Рунге-Ромберта: " << simp_rr << endl;
-    cout << "Абсолютная ошибка вычислений методов Симпсона: " << abs(simp_rr - best) << endl;
-
+    double rect_rr = runge_romberg(rect1, rect2, h2 / h1, 2);
+    cout << "Погрешность вычислений методом прямоугольников: " << rect_rr << endl;
+    double trap_rr = runge_romberg(trap1, trap2, h2 / h1, 2);
+    cout << "Погрешность вычислений методом трапеций: " << trap_rr << endl;
+    double simp_rr = runge_romberg(simp1, simp2, h2 / h1, 2);
+    cout << "Погрешность вычислений методом Симпсона: " << simp_rr << endl;
 }

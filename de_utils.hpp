@@ -26,14 +26,4 @@ void print_data(const std::vector<tddd> & v) {
     std::cout << "]\n";
 }
 
-void print_err(const std::vector<double> & v) {
-    for (size_t i = 0; i < v.size(); ++i) {
-        if (i) {
-            std::cout << ", ";
-        }
-        std::cout << v[i];
-    }
-    std::cout << "\n";
-}
-
 #endif /* DE_UTILS_HPP */

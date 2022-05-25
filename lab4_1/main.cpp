@@ -5,7 +5,7 @@
 using namespace std;
 
 double g(double x, double y, double z) {
-    return -y * pow(cos(x), 2) - z * tan(x);
+    return (z * x * (2 * x + 1) - y * (2 * x + 1)) / (x * x * (x + 1));
 }
 
 double f(double x, double y, double z) {
@@ -28,23 +28,23 @@ int main() {
     cout << "Метод Эйлера:" << endl;
     print_data(sol_euler);
     cout << "Погрешность вычислений:" << endl;
-    vector<double> euler_err = runge_romberg(de_euler.solve(h), de_euler.solve(h / 2), 1);
-    print_err(euler_err);
+    double euler_err = runge_romberg(de_euler.solve(h), de_euler.solve(h / 2), 1);
+    cout << euler_err << endl;
 
     runge de_runge(l, r, f, g, y0, z0);
     vector<tddd> sol_runge = de_runge.solve(h);
-    cout << "Метод Рунге-Кутта:" << endl;
+    cout << "Метод Рунге-Кутты:" << endl;
     print_data(sol_runge);
     cout << "Погрешность вычислений:" << endl;
-    vector<double> runge_err = runge_romberg(de_runge.solve(h), de_runge.solve(h / 2), 4);
-    print_err(runge_err);
+    double runge_err = runge_romberg(de_runge.solve(h), de_runge.solve(h / 2), 4);
+    cout << runge_err << endl;
 
     adams de_adams(l, r, f, g, y0, z0);
     vector<tddd> sol_adams = de_adams.solve(h);
     cout << "Метод Адамса:" << endl;
     print_data(sol_adams);
     cout << "Погрешность вычислений:" << endl;
-    vector<double> adams_err = runge_romberg(de_adams.solve(h), de_adams.solve(h / 2), 4);
-    print_err(adams_err);
+    double adams_err = runge_romberg(de_adams.solve(h), de_adams.solve(h / 2), 4);
+    cout << adams_err << endl;
 
 }
