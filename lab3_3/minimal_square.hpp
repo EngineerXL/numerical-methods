@@ -1,5 +1,5 @@
-#ifndef CUBIC_SPLINE_HPP
-#define CUBIC_SPLINE_HPP
+#ifndef MINIMAL_SQUARE_HPP
+#define MINIMAL_SQUARE_HPP
 
 #include "../lab1_1/lu.hpp"
 #include "../polynom.hpp"
@@ -77,4 +77,4 @@ public:
     }
 };
 
-#endif /* CUBIC_SPLINE_HPP */
+#endif /* MINIMAL_SQUARE_HPP */
