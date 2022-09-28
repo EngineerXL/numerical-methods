@@ -3,7 +3,7 @@ FLAGS_G++ = -g -pedantic -std=c++17 -Wall -Wextra -Werror
 OUTPUT_NAME = solver
 
 # Compile solution
-compile: main.cpp
+compile: main.cpp ppde.hpp
 	g++ $(FLAGS_G++) main.cpp -o $(OUTPUT_NAME)
 
 # Run solution
