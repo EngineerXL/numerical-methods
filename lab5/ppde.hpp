@@ -44,6 +44,22 @@ class ppde_t {
         c_3t2p_l[3] = 2 * h;
     }
 
+    vec c_2t2p_0, c_2t2p_l;
+
+    void prepare_2t2p() {
+        c_2t2p_0.resize(4, 0);
+        c_2t2p_0[0] = alpha_0 * (1 / tau + 2 * a / h2 - c) + beta_0 * (b - 2 * a / h);
+        c_2t2p_0[1] = -2 * alpha_0 * a / h2;
+        c_2t2p_0[2] = b - 2 * a / h;
+        c_2t2p_0[3] = alpha_0 / tau;
+
+        c_2t2p_l.resize(4, 0);
+        c_2t2p_l[0] = -2 * alpha_l * a / h2;
+        c_2t2p_l[1] = alpha_l * (1 / tau + 2 * a / h2 - c) + beta_l * (b + 2 * a / h);
+        c_2t2p_l[2] = b + 2 * a / h;
+        c_2t2p_l[3] = alpha_l / tau;
+    }
+
     void prepare_trd() {
         trd_a.resize(n, 0);
         trd_b.resize(n, 0);
@@ -65,8 +81,9 @@ class ppde_t {
     }
 
     void gen_boundary_0_2t2p(int k) {
-        (void)k;
-        throw 1;
+        trd_b[0] = c_2t2p_0[0];
+        trd_c[0] = c_2t2p_0[1];
+        trd_d[0] = c_2t2p_0[2] * gamma_0[k + 1] + c_2t2p_0[3] * uk[0];
     }
 
     void gen_boundary_0(int k) {
@@ -93,8 +110,9 @@ class ppde_t {
     }
 
     void gen_boundary_l_2t2p(int k) {
-        (void)k;
-        throw 1;
+        trd_a.back() = c_2t2p_l[0];
+        trd_b.back() = c_2t2p_l[1];
+        trd_d.back() = c_2t2p_l[2] * gamma_l[k + 1] + c_2t2p_l[3] * uk[n - 1];
     }
 
     void gen_boundary_l(int k) {
@@ -141,8 +159,12 @@ class ppde_t {
     }
 
     void boundary_explicit_2t2p(int k) {
-        (void)k;
-        throw 1;
+        double rhs0 = c_2t2p_0[2] * gamma_0[k + 1] + c_2t2p_0[3] * uk[0] - c_2t2p_0[1] * uk1[1];
+        double lhs0 = c_2t2p_0[0];
+        uk1[0] = rhs0 / lhs0;
+        double rhsl = c_2t2p_l[2] * gamma_l[k + 1] + c_2t2p_l[3] * uk[n - 1] - c_2t2p_l[0] * uk1[n - 2];
+        double lhsl = c_2t2p_l[1];
+        uk1[n - 1] = rhsl / lhsl;
     }
 
     void boundary_explicit(int k) {
@@ -193,6 +215,7 @@ public:
 
     void solve(std::ostream & out) {
         prepare_3t2p();
+        prepare_2t2p();
         if (theta < EPS) {
             solve_explicit(out);
         } else if (theta < 1) {
