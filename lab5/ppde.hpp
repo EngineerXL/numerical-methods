@@ -10,7 +10,6 @@ class ppde_t {
     int n, K, boundary;
     double l, T, h, tau, theta;
     double a, b, c;
-
     double alpha_0, beta_0, alpha_l, beta_l;
 
     double h2;
