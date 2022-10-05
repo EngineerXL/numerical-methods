@@ -228,7 +228,7 @@ public:
     void solve_implicit(std::ostream & out) {
         print_vec(out, uk);
         for (int k = 0; k < K - 1; ++k) {
-            gen_implicit(k + 1, false);
+            gen_implicit(k, false);
             tridiag trd(trd_a, trd_b, trd_c);
             uk1 = trd.solve(trd_d);
             print_vec(out, uk1);
@@ -239,7 +239,7 @@ public:
     void solve_combo(std::ostream & out) {
         print_vec(out, uk);
         for (int k = 0; k < K - 1; ++k) {
-            gen_implicit(k + 1, true);
+            gen_implicit(k, true);
             tridiag trd(trd_a, trd_b, trd_c);
             uk1 = trd.solve(trd_d);
             print_vec(out, uk1);
@@ -257,7 +257,7 @@ public:
                 double rhs = a * d2udx2 + b * dudx + c * uik;
                 uk1[i] = uik + tau * rhs;
             }
-            boundary_explicit(k + 1);
+            boundary_explicit(k);
             print_vec(out, uk1);
             swap(uk1, uk);
         }

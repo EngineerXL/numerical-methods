@@ -10,7 +10,7 @@ class tridiag_t {
 private:
     using vec = std::vector<T>;
 
-    const T EPS = 1e-6;
+    const double EPS = 1e-9;
 
     int n;
     vec a;
