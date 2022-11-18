@@ -39,7 +39,7 @@ class hpde_t {
 
     void prepare_u1_2() {
         for (int i = 0; i < n; ++i) {
-            u_k[i] = u_prev[i] + tau2 / 2 * (a * d2dx2_psi1[i] + b + ddx_psi1[i] + c * u_prev[i] + f[i][0]) + u_k[i] * (tau + d * tau2 / 2);
+            u_k[i] = u_prev[i] + tau2 / 2 * (a * d2dx2_psi1[i] + b * ddx_psi1[i] + c * u_prev[i] + f[i][0]) + u_k[i] * (tau + d * tau2 / 2);
         }
     }
 
