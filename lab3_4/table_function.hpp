@@ -6,9 +6,7 @@
 
 const double EPS = 1e-9;
 
-bool leq(double a, double b) {
-    return (a < b) or (std::abs(b - a) < EPS);
-}
+bool leq(double a, double b) { return (a < b) or (std::abs(b - a) < EPS); }
 
 class table_function_t {
     using vec = std::vector<double>;
@@ -16,8 +14,8 @@ class table_function_t {
     vec x;
     vec y;
 
-public:
-    table_function_t(const vec & _x, const vec & _y) {
+   public:
+    table_function_t(const vec& _x, const vec& _y) {
         if (_x.size() != _y.size()) {
             throw std::invalid_argument("Sizes does not match");
         }
@@ -32,7 +30,9 @@ public:
             if (x[i] < x0 and leq(x0, x[i + 1])) {
                 double dydx1 = (y[i + 1] - y[i + 0]) / (x[i + 1] - x[i + 0]);
                 double dydx2 = (y[i + 2] - y[i + 1]) / (x[i + 2] - x[i + 1]);
-                double res = dydx1 + (dydx2 - dydx1) * (2.0 * x0 - x[i] - x[i + 1]) / (x[i + 2] - x[i]);
+                double res = dydx1 + (dydx2 - dydx1) *
+                                         (2.0 * x0 - x[i] - x[i + 1]) /
+                                         (x[i + 2] - x[i]);
                 return res;
             }
         }

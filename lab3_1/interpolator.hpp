@@ -10,10 +10,10 @@ class inter_lagrange {
     vec y;
     size_t n;
 
-public:
-    inter_lagrange(const vec & _x, const vec & _y) : x(_x), y(_y), n(x.size()) {};
+   public:
+    inter_lagrange(const vec& _x, const vec& _y) : x(_x), y(_y), n(x.size()){};
 
-    polynom operator () () {
+    polynom operator()() {
         polynom res(vec({0}));
         for (size_t i = 0; i < n; ++i) {
             polynom li(vec({1}));
@@ -32,9 +32,9 @@ public:
 };
 
 class inter_newton {
-private:
-    using vvd = std::vector< std::vector<double> >;
-    using vvb = std::vector< std::vector<bool> >;
+   private:
+    using vvd = std::vector<std::vector<double> >;
+    using vvb = std::vector<std::vector<bool> >;
 
     vec x;
     vec y;
@@ -57,13 +57,13 @@ private:
         return memo[l][r] = res;
     }
 
-public:
-    inter_newton(const vec & _x, const vec & _y) : x(_x), y(_y), n(x.size()) {
+   public:
+    inter_newton(const vec& _x, const vec& _y) : x(_x), y(_y), n(x.size()) {
         memo.resize(n, std::vector<double>(n));
         calc.resize(n, std::vector<bool>(n));
     };
 
-    polynom operator () () {
+    polynom operator()() {
         polynom res(vec({y[0]}));
         polynom li(vec({-x[0], 1}));
         int r = 0;

@@ -25,7 +25,8 @@ class cubic_spline_t {
             eq_a[i - 2] = h[i - 1];
             eq_b[i - 2] = 2.0 * (h[i - 1] + h[i]);
             eq_c[i - 2] = h[i];
-            eq_d[i - 2] = 3.0 * ((y[i] - y[i - 1]) / h[i] - (y[i - 1] - y[i - 2]) / h[i - 1]);
+            eq_d[i - 2] = 3.0 * ((y[i] - y[i - 1]) / h[i] -
+                                 (y[i - 1] - y[i - 2]) / h[i - 1]);
         }
         eq_a[0] = 0.0;
         eq_c.back() = 0.0;
@@ -41,7 +42,8 @@ class cubic_spline_t {
             a[i] = y[i - 1];
         }
         for (size_t i = 1; i < n; ++i) {
-            b[i] = (y[i] - y[i - 1]) / h[i] - h[i] * (c[i + 1] + 2.0 * c[i]) / 3.0;
+            b[i] =
+                (y[i] - y[i - 1]) / h[i] - h[i] * (c[i + 1] + 2.0 * c[i]) / 3.0;
             d[i] = (c[i + 1] - c[i]) / (3.0 * h[i]);
         }
         c[1] = 0.0;
@@ -49,8 +51,8 @@ class cubic_spline_t {
         d[n] = -c[n] / (3.0 * h[n]);
     }
 
-public:
-    cubic_spline_t(const vec & _x, const vec & _y) {
+   public:
+    cubic_spline_t(const vec& _x, const vec& _y) {
         if (_x.size() != _y.size()) {
             throw std::invalid_argument("Sizes does not match");
         }
@@ -62,17 +64,19 @@ public:
         c.resize(n + 1);
         d.resize(n + 1);
         build_spline();
-
     }
 
-    friend std::ostream & operator << (std::ostream & out, const cubic_spline_t & spline) {
+    friend std::ostream& operator<<(std::ostream& out,
+                                    const cubic_spline_t& spline) {
         for (size_t i = 1; i <= spline.n; ++i) {
-            out << "i = " << i << ", a = " << spline.a[i] << ", b = " << spline.b[i] << ", c = " << spline.c[i] << ", d = " << spline.d[i] << '\n';
+            out << "i = " << i << ", a = " << spline.a[i]
+                << ", b = " << spline.b[i] << ", c = " << spline.c[i]
+                << ", d = " << spline.d[i] << '\n';
         }
         return out;
     }
 
-    double operator () (double x0) {
+    double operator()(double x0) {
         for (size_t i = 1; i <= n; ++i) {
             if (x[i - 1] <= x0 and x0 <= x[i]) {
                 double x1 = x0 - x[i - 1];

@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iostream>
+
 #include "minimal_square.hpp"
 
 using namespace std;
@@ -13,13 +14,9 @@ double f0(double x0) {
     return 1.0;
 }
 
-double f1(double x0) {
-    return x0;
-}
+double f1(double x0) { return x0; }
 
-double f2(double x0) {
-    return x0 * x0;
-}
+double f2(double x0) { return x0 * x0; }
 
 int main() {
     int n;

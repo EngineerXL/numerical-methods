@@ -2,6 +2,7 @@
 #define INTEGRATE_HPP
 
 #include <cmath>
+
 #include "../lab3_1/interpolator.hpp"
 
 using func = double(double);

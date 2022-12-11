@@ -5,8 +5,8 @@
 #include <iostream>
 #include <vector>
 
-template<class T>
-std::vector<T> operator + (const std::vector<T> & a, const std::vector<T> & b) {
+template <class T>
+std::vector<T> operator+(const std::vector<T>& a, const std::vector<T>& b) {
     size_t n = a.size();
     std::vector<T> c(n);
     for (size_t i = 0; i < n; ++i) {
@@ -15,8 +15,8 @@ std::vector<T> operator + (const std::vector<T> & a, const std::vector<T> & b) {
     return c;
 }
 
-template<class T>
-std::vector<T> operator - (const std::vector<T> & a, const std::vector<T> & b) {
+template <class T>
+std::vector<T> operator-(const std::vector<T>& a, const std::vector<T>& b) {
     size_t n = a.size();
     std::vector<T> c(n);
     for (size_t i = 0; i < n; ++i) {
@@ -25,32 +25,29 @@ std::vector<T> operator - (const std::vector<T> & a, const std::vector<T> & b) {
     return c;
 }
 
-template<class T>
+template <class T>
 class matrix_t {
-private:
+   private:
     using matrix = matrix_t<T>;
     using vec = std::vector<T>;
 
     size_t n, m;
     std::vector<vec> data;
-public:
+
+   public:
     matrix_t() : n(1), m(1), data(1) {}
 
-    matrix_t(size_t _n) : n(_n), m(_n) {
-        data.resize(n, vec(n));
-    }
+    matrix_t(size_t _n) : n(_n), m(_n) { data.resize(n, vec(n)); }
 
-    matrix_t(size_t _n, size_t _m) : n(_n), m(_m) {
-        data.resize(n, vec(m));
-    }
+    matrix_t(size_t _n, size_t _m) : n(_n), m(_m) { data.resize(n, vec(m)); }
 
-    matrix_t(const matrix & other) {
+    matrix_t(const matrix& other) {
         n = other.n;
         m = other.m;
         data = other.data;
     }
 
-    matrix & operator = (const matrix & other) {
+    matrix& operator=(const matrix& other) {
         if (this == &other) {
             return *this;
         }
@@ -68,13 +65,9 @@ public:
         return res;
     }
 
-    size_t rows() const {
-        return n;
-    }
+    size_t rows() const { return n; }
 
-    size_t cols() const {
-        return m;
-    }
+    size_t cols() const { return m; }
 
     void swap_rows(size_t i, size_t j) {
         if (i == j) {
@@ -104,7 +97,7 @@ public:
         return res;
     }
 
-    friend matrix operator + (const matrix & a, const matrix & b) {
+    friend matrix operator+(const matrix& a, const matrix& b) {
         if (a.rows() != b.rows() or a.cols() != b.cols()) {
             throw std::invalid_argument("Sizes does not match");
         }
@@ -119,7 +112,7 @@ public:
         return res;
     }
 
-    friend matrix operator - (const matrix & a, const matrix & b) {
+    friend matrix operator-(const matrix& a, const matrix& b) {
         if (a.rows() != b.rows() or a.cols() != b.cols()) {
             throw std::invalid_argument("Sizes does not match");
         }
@@ -134,7 +127,7 @@ public:
         return res;
     }
 
-    friend matrix operator * (T lambda, const matrix & a) {
+    friend matrix operator*(T lambda, const matrix& a) {
         size_t n = a.rows();
         size_t m = a.cols();
         matrix res(n, m);
@@ -146,7 +139,7 @@ public:
         return res;
     }
 
-    friend vec operator * (const matrix & a, const vec & b) {
+    friend vec operator*(const matrix& a, const vec& b) {
         if (a.cols() != b.size()) {
             throw std::invalid_argument("Sizes does not match");
         }
@@ -161,7 +154,7 @@ public:
         return c;
     }
 
-    friend matrix operator * (const matrix & a, const matrix & b) {
+    friend matrix operator*(const matrix& a, const matrix& b) {
         if (a.cols() != b.rows()) {
             throw std::invalid_argument("Sizes does not match");
         }
@@ -179,15 +172,11 @@ public:
         return res;
     }
 
-    vec & operator [] (size_t i) {
-        return data[i];
-    }
+    vec& operator[](size_t i) { return data[i]; }
 
-    const vec & operator [] (size_t i) const {
-        return data[i];
-    }
+    const vec& operator[](size_t i) const { return data[i]; }
 
-    friend std::ostream & operator << (std::ostream & out, const matrix & matr) {
+    friend std::ostream& operator<<(std::ostream& out, const matrix& matr) {
         for (size_t i = 0; i < matr.rows(); ++i) {
             for (size_t j = 0; j < matr.cols(); ++j) {
                 if (j) {
@@ -200,7 +189,7 @@ public:
         return out;
     }
 
-    friend std::istream & operator >> (std::istream & in, matrix & matr) {
+    friend std::istream& operator>>(std::istream& in, matrix& matr) {
         for (size_t i = 0; i < matr.rows(); ++i) {
             for (size_t j = 0; j < matr.cols(); ++j) {
                 in >> matr[i][j];

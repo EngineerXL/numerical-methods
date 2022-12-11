@@ -27,9 +27,7 @@ double phi2_s(double x1, double x2) {
     return std::cos(x1);
 }
 
-double phi(double x1, double x2) {
-    return phi1_s(x1, x2) * phi2_s(x1, x2);
-}
+double phi(double x1, double x2) { return phi1_s(x1, x2) * phi2_s(x1, x2); }
 
 using pdd = std::pair<double, double>;
 
@@ -59,13 +57,9 @@ using matrix = matrix_t<double>;
 using lu = lu_t<double>;
 using vec = std::vector<double>;
 
-double f1(double x1, double x2) {
-    return x1 - std::cos(x2) - a;
-}
+double f1(double x1, double x2) { return x1 - std::cos(x2) - a; }
 
-double f2(double x1, double x2) {
-    return x2 - std::sin(x1) - a;
-}
+double f2(double x1, double x2) { return x2 - std::sin(x1) - a; }
 
 matrix j(double x1, double x2) {
     matrix res(2);
@@ -76,7 +70,7 @@ matrix j(double x1, double x2) {
     return res;
 }
 
-double norm(const vec & v) {
+double norm(const vec& v) {
     double res = 0;
     for (double elem : v) {
         res = std::max(res, std::abs(elem));

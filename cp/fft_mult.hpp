@@ -23,7 +23,7 @@ int rev_bits(int x, int lg_n) {
     return y;
 }
 
-void fft(vc & a, bool invert) {
+void fft(vc& a, bool invert) {
     int n = a.size();
     int lg_n = 0;
     while ((1 << lg_n) < n) {
@@ -59,7 +59,7 @@ void fft(vc & a, bool invert) {
     }
 }
 
-std::string fft_mult(const std::string & a, const std::string & b) {
+std::string fft_mult(const std::string& a, const std::string& b) {
     size_t max_size = std::max(a.size(), b.size());
     size_t n = 1;
     while (n < max_size) {
@@ -98,7 +98,7 @@ std::string fft_mult(const std::string & a, const std::string & b) {
     return ab;
 }
 
-std::string slow_mult(const std::string & a, const std::string & b) {
+std::string slow_mult(const std::string& a, const std::string& b) {
     size_t n = 4 * std::max(a.size(), b.size());
     vi res(n);
     for (size_t i = 0; i < a.size(); ++i) {

@@ -2,30 +2,36 @@
 #define BOUNDARY_SOLVER_HPP
 
 #include <cmath>
+
 #include "../lab1_2/tridiag.hpp"
 #include "../lab4_1/simple_desolve.hpp"
 
 class shooting {
-private:
+   private:
     double a, b;
     func f, g;
     double alpha, beta, y0;
     double delta, gamma, y1;
 
-public:
-    shooting(const double _a, const double _b,
-        const func _f, const func _g,
-        const double _alpha, const double _beta, const double _y0,
-        const double _delta, const double _gamma, const double _y1)
-        : a(_a), b(_b), f(_f), g(_g),
-        alpha(_alpha), beta(_beta), y0(_y0),
-        delta(_delta), gamma(_gamma), y1(_y1) {}
+   public:
+    shooting(const double _a, const double _b, const func _f, const func _g,
+             const double _alpha, const double _beta, const double _y0,
+             const double _delta, const double _gamma, const double _y1)
+        : a(_a),
+          b(_b),
+          f(_f),
+          g(_g),
+          alpha(_alpha),
+          beta(_beta),
+          y0(_y0),
+          delta(_delta),
+          gamma(_gamma),
+          y1(_y1) {}
 
-    double get_start_cond(double eta) {
-        return (y0 - alpha * eta) / beta;
-    }
+    double get_start_cond(double eta) { return (y0 - alpha * eta) / beta; }
 
-    double get_eta_next(double eta_prev, double eta, const vect sol_prev, const vect sol) {
+    double get_eta_next(double eta_prev, double eta, const vect sol_prev,
+                        const vect sol) {
         double yb_prev = std::get<1>(sol_prev.back());
         double zb_prev = std::get<2>(sol_prev.back());
         double phi_prev = delta * yb_prev + gamma * zb_prev - y1;
@@ -59,7 +65,7 @@ public:
 };
 
 class fin_dif {
-private:
+   private:
     using fx = std::function<double(double)>;
     using tridiag = tridiag_t<double>;
 
@@ -68,14 +74,22 @@ private:
     double alpha, beta, y0;
     double delta, gamma, y1;
 
-public:
-    fin_dif(const double _a, const double _b,
-        const fx _p, const fx _q, const fx _f,
-        const double _alpha, const double _beta, const double _y0,
-        const double _delta, const double _gamma, const double _y1)
-        : a(_a), b(_b), p(_p), q(_q), f(_f),
-        alpha(_alpha), beta(_beta), y0(_y0),
-        delta(_delta), gamma(_gamma), y1(_y1) {}
+   public:
+    fin_dif(const double _a, const double _b, const fx _p, const fx _q,
+            const fx _f, const double _alpha, const double _beta,
+            const double _y0, const double _delta, const double _gamma,
+            const double _y1)
+        : a(_a),
+          b(_b),
+          p(_p),
+          q(_q),
+          f(_f),
+          alpha(_alpha),
+          beta(_beta),
+          y0(_y0),
+          delta(_delta),
+          gamma(_gamma),
+          y1(_y1) {}
 
     vect solve(double h) {
         size_t n = (b - a) / h;

@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iostream>
+
 #include "cubic_spline.hpp"
 
 using namespace std;
@@ -23,5 +24,6 @@ int main() {
     cout << fixed;
     cubic_spline_t f(x, y);
     cout << "Полученные сплайны:\n" << f << endl;
-    cout << "Значение функции в точке x0 = " << x0 << ", f(x0) = " << f(x0) << endl;
+    cout << "Значение функции в точке x0 = " << x0 << ", f(x0) = " << f(x0)
+         << endl;
 }

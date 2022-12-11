@@ -40,8 +40,8 @@ class minimal_square_t {
         return res;
     }
 
-public:
-    minimal_square_t(const vec & _x, const vec & _y, const vf & _phi) {
+   public:
+    minimal_square_t(const vec& _x, const vec& _y, const vf& _phi) {
         if (_x.size() != _y.size()) {
             throw std::invalid_argument("Sizes does not match");
         }
@@ -54,7 +54,8 @@ public:
         build();
     }
 
-    friend std::ostream & operator << (std::ostream & out, const minimal_square_t & item) {
+    friend std::ostream& operator<<(std::ostream& out,
+                                    const minimal_square_t& item) {
         for (size_t i = 0; i < item.m; ++i) {
             if (i) {
                 out << ' ';
@@ -72,9 +73,7 @@ public:
         return res;
     }
 
-    double operator () (double x0) {
-        return get(x0);
-    }
+    double operator()(double x0) { return get(x0); }
 };
 
 #endif /* MINIMAL_SQUARE_HPP */

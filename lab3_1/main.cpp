@@ -1,4 +1,5 @@
 #include <cmath>
+
 #include "interpolator.hpp"
 
 using namespace std;
@@ -19,10 +20,12 @@ int main() {
     inter_lagrange my_lagrange(x, y);
     polynom lagrange = my_lagrange();
     cout << "Интерполяционный многочлен Лагранжа: " << lagrange << endl;
-    cout << "Погрешность в точке X*: " << abs(lagrange(x_star) - atan(x_star)) << endl;
+    cout << "Погрешность в точке X*: " << abs(lagrange(x_star) - atan(x_star))
+         << endl;
 
     inter_newton my_newton(x, y);
     polynom newton = my_newton();
     cout << "Интерполяционный многочлен Ньютона: " << newton << endl;
-    cout << "Погрешность в точке X*: " << abs(newton(x_star) - atan(x_star)) << endl;
+    cout << "Погрешность в точке X*: " << abs(newton(x_star) - atan(x_star))
+         << endl;
 }

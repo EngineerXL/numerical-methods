@@ -5,25 +5,15 @@
 
 int iter_count = 0;
 
-double f(double x) {
-    return std::sin(x) - 2.0 * x * x + 0.5;
-}
+double f(double x) { return std::sin(x) - 2.0 * x * x + 0.5; }
 
-double f_s(double x) {
-    return std::cos(x) - 4.0 * x;
-}
+double f_s(double x) { return std::cos(x) - 4.0 * x; }
 
-double f_ss(double x) {
-    return -std::sin(x) - 4.0;
-}
+double f_ss(double x) { return -std::sin(x) - 4.0; }
 
-double phi(double x) {
-    return std::sqrt(0.5 * std::sin(x) + 0.25);
-}
+double phi(double x) { return std::sqrt(0.5 * std::sin(x) + 0.25); }
 
-double phi_s(double x) {
-    return std::cos(x) / (4.0 * phi(x));
-}
+double phi_s(double x) { return std::cos(x) / (4.0 * phi(x)); }
 
 double iter_solve(double l, double r, double eps) {
     iter_count = 0;

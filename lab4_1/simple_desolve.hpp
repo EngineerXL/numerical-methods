@@ -1,8 +1,9 @@
 #ifndef SIMPLE_DESOLVE_HPP
 #define SIMPLE_DESOLVE_HPP
 
-#include "../de_utils.hpp"
 #include <functional>
+
+#include "../de_utils.hpp"
 
 /* f(x, y, z) */
 using func = std::function<double(double, double, double)>;
@@ -11,20 +12,18 @@ using vec = std::vector<double>;
 
 const double EPS = 1e-9;
 
-bool leq(double a, double b) {
-    return (a < b) or (std::abs(b - a) < EPS);
-}
+bool leq(double a, double b) { return (a < b) or (std::abs(b - a) < EPS); }
 
 class euler {
-private:
+   private:
     double l, r;
     func f, g;
     double y0, z0;
 
-public:
-    euler(const double _l, const double _r,
-        const func _f, const func _g,
-        const double _y0, const double _z0) : l(_l), r(_r), f(_f), g(_g), y0(_y0), z0(_z0) {}
+   public:
+    euler(const double _l, const double _r, const func _f, const func _g,
+          const double _y0, const double _z0)
+        : l(_l), r(_r), f(_f), g(_g), y0(_y0), z0(_z0) {}
 
     vect solve(double h) {
         vect res;
@@ -45,15 +44,15 @@ public:
 };
 
 class runge {
-private:
+   private:
     double l, r;
     func f, g;
     double y0, z0;
 
-public:
-    runge(const double _l, const double _r,
-        const func _f, const func _g,
-        const double _y0, const double _z0) : l(_l), r(_r), f(_f), g(_g), y0(_y0), z0(_z0) {}
+   public:
+    runge(const double _l, const double _r, const func _f, const func _g,
+          const double _y0, const double _z0)
+        : l(_l), r(_r), f(_f), g(_g), y0(_y0), z0(_z0) {}
 
     vect solve(double h) {
         vect res;
@@ -82,15 +81,15 @@ public:
 };
 
 class adams {
-private:
+   private:
     double l, r;
     func f, g;
     double y0, z0;
 
-public:
-    adams(const double _l, const double _r,
-        const func _f, const func _g,
-        const double _y0, const double _z0) : l(_l), r(_r), f(_f), g(_g), y0(_y0), z0(_z0) {}
+   public:
+    adams(const double _l, const double _r, const func _f, const func _g,
+          const double _y0, const double _z0)
+        : l(_l), r(_r), f(_f), g(_g), y0(_y0), z0(_z0) {}
 
     double calc_tuple(func f, tddd xyz) {
         return f(std::get<0>(xyz), std::get<1>(xyz), std::get<2>(xyz));
@@ -108,28 +107,28 @@ public:
         double zk = std::get<2>(res.back());
         while (leq(xk + h, r)) {
             /* Predictor */
-            double dy = (h / 24.0) * (55.0 * calc_tuple(f, res[cnt - 1])
-                                    - 59.0 * calc_tuple(f, res[cnt - 2])
-                                    + 37.0 * calc_tuple(f, res[cnt - 3])
-                                    - 9.0 * calc_tuple(f, res[cnt - 4]));
-            double dz = (h / 24.0) * (55.0 * calc_tuple(g, res[cnt - 1])
-                                    - 59.0 * calc_tuple(g, res[cnt - 2])
-                                    + 37.0 * calc_tuple(g, res[cnt - 3])
-                                    - 9.0 * calc_tuple(g, res[cnt - 4]));
+            double dy = (h / 24.0) * (55.0 * calc_tuple(f, res[cnt - 1]) -
+                                      59.0 * calc_tuple(f, res[cnt - 2]) +
+                                      37.0 * calc_tuple(f, res[cnt - 3]) -
+                                      9.0 * calc_tuple(f, res[cnt - 4]));
+            double dz = (h / 24.0) * (55.0 * calc_tuple(g, res[cnt - 1]) -
+                                      59.0 * calc_tuple(g, res[cnt - 2]) +
+                                      37.0 * calc_tuple(g, res[cnt - 3]) -
+                                      9.0 * calc_tuple(g, res[cnt - 4]));
             double xk1 = xk + h;
             double yk1 = yk + dy;
             double zk1 = zk + dz;
             res.push_back(std::make_tuple(xk1, yk1, zk1));
             ++cnt;
             /* Corrector */
-            dy = (h / 24.0) * (9.0 * calc_tuple(f, res[cnt - 1])
-                            + 19.0 * calc_tuple(f, res[cnt - 2])
-                            - 5.0 * calc_tuple(f, res[cnt - 3])
-                            + 1.0 * calc_tuple(f, res[cnt - 4]));
-            dz = (h / 24.0) * (9.0 * calc_tuple(g, res[cnt - 1])
-                            + 19.0 * calc_tuple(g, res[cnt - 2])
-                            - 5.0 * calc_tuple(g, res[cnt - 3])
-                            + 1.0 * calc_tuple(g, res[cnt - 4]));
+            dy = (h / 24.0) * (9.0 * calc_tuple(f, res[cnt - 1]) +
+                               19.0 * calc_tuple(f, res[cnt - 2]) -
+                               5.0 * calc_tuple(f, res[cnt - 3]) +
+                               1.0 * calc_tuple(f, res[cnt - 4]));
+            dz = (h / 24.0) * (9.0 * calc_tuple(g, res[cnt - 1]) +
+                               19.0 * calc_tuple(g, res[cnt - 2]) -
+                               5.0 * calc_tuple(g, res[cnt - 3]) +
+                               1.0 * calc_tuple(g, res[cnt - 4]));
             xk += h;
             yk += dy;
             zk += dz;
@@ -140,11 +139,12 @@ public:
     }
 };
 
-double runge_romberg(const vect & y_2h, const vect & y_h, double p) {
+double runge_romberg(const vect& y_2h, const vect& y_h, double p) {
     double coef = 1.0 / (std::pow(2, p) - 1.0);
     double res = 0.0;
     for (size_t i = 0; i < y_2h.size(); ++i) {
-        res = std::max(res, coef * std::abs(std::get<1>(y_2h[i]) - std::get<1>(y_h[2 * i])));
+        res = std::max(res, coef * std::abs(std::get<1>(y_2h[i]) -
+                                            std::get<1>(y_h[2 * i])));
     }
     return res;
 }

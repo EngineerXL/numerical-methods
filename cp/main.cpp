@@ -1,5 +1,6 @@
-#include "fft_mult.hpp"
 #include <iostream>
+
+#include "fft_mult.hpp"
 
 using namespace std;
 

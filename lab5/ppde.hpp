@@ -21,7 +21,7 @@ class ppde_t {
     using tridiag = tridiag_t<double>;
     vec trd_a, trd_b, trd_c, trd_d;
 
-    void gen_explicit(int i, double & uik, double & dudx, double & d2udx2) {
+    void gen_explicit(int i, double& uik, double& dudx, double& d2udx2) {
         uik = uk[i];
         dudx = (uk[i + 1] - uk[i - 1]) / (2 * h);
         d2udx2 = (uk[i - 1] - 2 * uik + uk[i + 1]) / h2;
@@ -47,14 +47,16 @@ class ppde_t {
 
     void prepare_2t2p() {
         c_2t2p_0.resize(4, 0);
-        c_2t2p_0[0] = alpha_0 * (1 / tau + 2 * a / h2 - c) + beta_0 * (b - 2 * a / h);
+        c_2t2p_0[0] =
+            alpha_0 * (1 / tau + 2 * a / h2 - c) + beta_0 * (b - 2 * a / h);
         c_2t2p_0[1] = -2 * alpha_0 * a / h2;
         c_2t2p_0[2] = b - 2 * a / h;
         c_2t2p_0[3] = alpha_0 / tau;
 
         c_2t2p_l.resize(4, 0);
         c_2t2p_l[0] = -2 * alpha_l * a / h2;
-        c_2t2p_l[1] = alpha_l * (1 / tau + 2 * a / h2 - c) + beta_l * (b + 2 * a / h);
+        c_2t2p_l[1] =
+            alpha_l * (1 / tau + 2 * a / h2 - c) + beta_l * (b + 2 * a / h);
         c_2t2p_l[2] = b + 2 * a / h;
         c_2t2p_l[3] = alpha_l / tau;
     }
@@ -144,24 +146,30 @@ class ppde_t {
     }
 
     void boundary_explicit_2t1p(int k) {
-        uk1[0] = (gamma_0[k + 1] - alpha_0 * uk1[1] / h) / (beta_0 - alpha_0 / h);
-        uk1[n - 1] = (gamma_l[k + 1] + alpha_l * uk1[n - 2] / h) / (alpha_l / h + beta_l);
+        uk1[0] =
+            (gamma_0[k + 1] - alpha_0 * uk1[1] / h) / (beta_0 - alpha_0 / h);
+        uk1[n - 1] = (gamma_l[k + 1] + alpha_l * uk1[n - 2] / h) /
+                     (alpha_l / h + beta_l);
     }
 
     void boundary_explicit_3t2p(int k) {
-        double rhs0 = c_3t2p_0[3] * gamma_0[k + 1] - c_3t2p_0[2] * uk1[2] - c_3t2p_0[1] * uk1[1];
+        double rhs0 = c_3t2p_0[3] * gamma_0[k + 1] - c_3t2p_0[2] * uk1[2] -
+                      c_3t2p_0[1] * uk1[1];
         double lhs0 = c_3t2p_0[0];
         uk1[0] = rhs0 / lhs0;
-        double rhsl = c_3t2p_l[3] * gamma_l[k + 1] - c_3t2p_l[0] * uk1[n - 3] - c_3t2p_l[1] * uk1[n - 2];
+        double rhsl = c_3t2p_l[3] * gamma_l[k + 1] - c_3t2p_l[0] * uk1[n - 3] -
+                      c_3t2p_l[1] * uk1[n - 2];
         double lhsl = c_3t2p_l[2];
         uk1[n - 1] = rhsl / lhsl;
     }
 
     void boundary_explicit_2t2p(int k) {
-        double rhs0 = c_2t2p_0[2] * gamma_0[k + 1] + c_2t2p_0[3] * uk[0] - c_2t2p_0[1] * uk1[1];
+        double rhs0 = c_2t2p_0[2] * gamma_0[k + 1] + c_2t2p_0[3] * uk[0] -
+                      c_2t2p_0[1] * uk1[1];
         double lhs0 = c_2t2p_0[0];
         uk1[0] = rhs0 / lhs0;
-        double rhsl = c_2t2p_l[2] * gamma_l[k + 1] + c_2t2p_l[3] * uk[n - 1] - c_2t2p_l[0] * uk1[n - 2];
+        double rhsl = c_2t2p_l[2] * gamma_l[k + 1] + c_2t2p_l[3] * uk[n - 1] -
+                      c_2t2p_l[0] * uk1[n - 2];
         double lhsl = c_2t2p_l[1];
         uk1[n - 1] = rhsl / lhsl;
     }
@@ -176,7 +184,7 @@ class ppde_t {
         }
     }
 
-    static void print_vec(std::ostream & out, const vec & v) {
+    static void print_vec(std::ostream& out, const vec& v) {
         size_t n = v.size();
         for (size_t i = 0; i < n; ++i) {
             if (i) {
@@ -187,8 +195,8 @@ class ppde_t {
         out << '\n';
     }
 
-public:
-    friend std::istream & operator >> (std::istream & in, ppde_t & item) {
+   public:
+    friend std::istream& operator>>(std::istream& in, ppde_t& item) {
         in >> item.n >> item.K >> item.boundary;
         in >> item.l >> item.T >> item.h >> item.tau >> item.theta;
         if (item.theta < 0 or item.theta > 1) {
@@ -212,7 +220,7 @@ public:
         return in;
     }
 
-    void solve(std::ostream & out) {
+    void solve(std::ostream& out) {
         prepare_3t2p();
         prepare_2t2p();
         if (theta < EPS) {
@@ -224,7 +232,7 @@ public:
         }
     }
 
-    void solve_implicit(std::ostream & out) {
+    void solve_implicit(std::ostream& out) {
         print_vec(out, uk);
         for (int k = 0; k < K - 1; ++k) {
             gen_implicit(k, false);
@@ -235,7 +243,7 @@ public:
         }
     }
 
-    void solve_combo(std::ostream & out) {
+    void solve_combo(std::ostream& out) {
         print_vec(out, uk);
         for (int k = 0; k < K - 1; ++k) {
             gen_implicit(k, true);
@@ -246,7 +254,7 @@ public:
         }
     }
 
-    void solve_explicit(std::ostream & out) {
+    void solve_explicit(std::ostream& out) {
         print_vec(out, uk);
         for (int k = 0; k < K - 1; ++k) {
             uk1.assign(n, 0);

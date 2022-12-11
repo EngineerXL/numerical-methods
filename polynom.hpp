@@ -5,7 +5,7 @@
 #include <vector>
 
 class polynom {
-private:
+   private:
     using vec = std::vector<double>;
 
     vec data;
@@ -13,26 +13,20 @@ private:
 
     constexpr static double EPS = 1e-9;
 
-public:
+   public:
     polynom() : data(1), n(1) {}
 
     polynom(int _n) : data(_n), n(_n) {}
 
-    polynom(const vec & coef) : data(coef), n(data.size()) {}
+    polynom(const vec& coef) : data(coef), n(data.size()) {}
 
-    size_t size() const {
-        return n;
-    }
+    size_t size() const { return n; }
 
-    double & operator [] (size_t id) {
-        return data[id];
-    }
+    double& operator[](size_t id) { return data[id]; }
 
-    const double & operator [] (size_t id) const {
-        return data[id];
-    }
+    const double& operator[](size_t id) const { return data[id]; }
 
-    friend polynom operator + (const polynom & lhs, const polynom & rhs) {
+    friend polynom operator+(const polynom& lhs, const polynom& rhs) {
         polynom res(std::max(lhs.size(), rhs.size()));
         for (size_t i = 0; i < lhs.size(); ++i) {
             res[i] += lhs[i];
@@ -43,7 +37,7 @@ public:
         return res;
     }
 
-    friend polynom operator - (const polynom & lhs, const polynom & rhs) {
+    friend polynom operator-(const polynom& lhs, const polynom& rhs) {
         polynom res(std::max(lhs.size(), rhs.size()));
         for (size_t i = 0; i < lhs.size(); ++i) {
             res[i] += lhs[i];
@@ -54,7 +48,7 @@ public:
         return res;
     }
 
-    friend polynom operator * (double lambda, const polynom & p) {
+    friend polynom operator*(double lambda, const polynom& p) {
         polynom res(p);
         for (size_t i = 0; i < res.size(); ++i) {
             res[i] *= lambda;
@@ -62,7 +56,7 @@ public:
         return res;
     }
 
-    friend polynom operator / (const polynom & p, double lambda) {
+    friend polynom operator/(const polynom& p, double lambda) {
         polynom res(p);
         for (size_t i = 0; i < res.size(); ++i) {
             res[i] /= lambda;
@@ -71,7 +65,7 @@ public:
     }
 
     /* FFT? */
-    friend polynom operator * (const polynom & lhs, const polynom & rhs) {
+    friend polynom operator*(const polynom& lhs, const polynom& rhs) {
         polynom res(lhs.size() + rhs.size());
         for (size_t i = 0; i < lhs.size(); ++i) {
             for (size_t j = 0; j < rhs.size(); ++j) {
@@ -106,7 +100,7 @@ public:
         return F(r) - F(l);
     }
 
-    double operator () (double x) {
+    double operator()(double x) {
         double res = 0.0;
         double xi = 1.0;
         for (double elem : data) {
@@ -116,7 +110,7 @@ public:
         return res;
     }
 
-    friend std::ostream & operator << (std::ostream & out, const polynom & poly) {
+    friend std::ostream& operator<<(std::ostream& out, const polynom& poly) {
         bool flag = false;
         int deg = 0;
         for (double elem : poly.data) {

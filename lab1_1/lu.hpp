@@ -1,15 +1,15 @@
 #ifndef LU_HPP
 #define LU_HPP
 
-#include "../matrix.hpp"
-
 #include <algorithm>
 #include <cmath>
 #include <utility>
 
-template<class T>
+#include "../matrix.hpp"
+
+template <class T>
 class lu_t {
-private:
+   private:
     using matrix = matrix_t<T>;
     using vec = std::vector<T>;
     using pii = std::pair<size_t, size_t>;
@@ -54,13 +54,14 @@ private:
         }
     }
 
-    void do_swaps(vec & x) {
+    void do_swaps(vec& x) {
         for (pii elem : swaps) {
             std::swap(x[elem.first], x[elem.second]);
         }
     }
-public:
-    lu_t(const matrix & matr) {
+
+   public:
+    lu_t(const matrix& matr) {
         if (matr.rows() != matr.cols()) {
             throw std::invalid_argument("Matrix is not square");
         }
@@ -69,14 +70,12 @@ public:
         decompose();
     }
 
-    friend std::ostream & operator << (std::ostream & out, const lu_t<T> & lu) {
+    friend std::ostream& operator<<(std::ostream& out, const lu_t<T>& lu) {
         out << "Matrix L:\n" << lu.l << "Matrix U:\n" << lu.u;
         return out;
     }
 
-    T get_det() {
-        return det;
-    }
+    T get_det() { return det; }
 
     vec solve(vec b) {
         int n = b.size();

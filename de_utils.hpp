@@ -2,12 +2,12 @@
 #define DE_UTILS_HPP
 
 #include <iostream>
-#include <vector>
 #include <tuple>
+#include <vector>
 
 using tddd = std::tuple<double, double, double>;
 
-void print_data(const std::vector<tddd> & v) {
+void print_data(const std::vector<tddd>& v) {
     std::cout << "x = [";
     for (size_t i = 0; i < v.size(); ++i) {
         if (i) {

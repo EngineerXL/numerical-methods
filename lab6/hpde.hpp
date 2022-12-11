@@ -39,7 +39,11 @@ class hpde_t {
 
     void prepare_u1_2() {
         for (int i = 0; i < n; ++i) {
-            u_k[i] = u_prev[i] + tau2 / 2 * (a * d2dx2_psi1[i] + b * ddx_psi1[i] + c * u_prev[i] + f[i][0]) + u_k[i] * (tau + d * tau2 / 2);
+            u_k[i] = u_prev[i] +
+                     tau2 / 2 *
+                         (a * d2dx2_psi1[i] + b * ddx_psi1[i] + c * u_prev[i] +
+                          f[i][0]) +
+                     u_k[i] * (tau + d * tau2 / 2);
         }
     }
 
@@ -99,7 +103,9 @@ class hpde_t {
 
     void prepare_2t2p() {
         c_2t2p_0.resize(COEFS_2T2P);
-        c_2t2p_0[0] = -alpha_0 * a - alpha_0 * h2 / 2 * (1 / tau2 - c - d / (2 * tau)) + beta_0 * (a * h - b * h2 / 2);
+        c_2t2p_0[0] = -alpha_0 * a -
+                      alpha_0 * h2 / 2 * (1 / tau2 - c - d / (2 * tau)) +
+                      beta_0 * (a * h - b * h2 / 2);
         c_2t2p_0[1] = alpha_0 * a;
         c_2t2p_0[2] = alpha_0 * h2 / tau2;
         c_2t2p_0[3] = -alpha_0 * h2 / (2 * tau2) + alpha_0 * h2 * d / (4 * tau);
@@ -108,7 +114,9 @@ class hpde_t {
 
         c_2t2p_l.resize(COEFS_2T2P);
         c_2t2p_l[0] = -alpha_l * a;
-        c_2t2p_l[1] = alpha_l * a + alpha_l * h2 / 2 * (1 / tau2 - c - d / (2 * tau)) + beta_l * (a * h + b * h2 / 2);
+        c_2t2p_l[1] = alpha_l * a +
+                      alpha_l * h2 / 2 * (1 / tau2 - c - d / (2 * tau)) +
+                      beta_l * (a * h + b * h2 / 2);
         c_2t2p_l[2] = -alpha_l * h2 / tau2;
         c_2t2p_l[3] = alpha_l * h2 / (2 * tau2) + alpha_l * h2 * d / (4 * tau);
         c_2t2p_l[4] = a * h + b * h2 / 2;
@@ -141,7 +149,8 @@ class hpde_t {
     void gen_boundary_0_2t2p(int k) {
         trd_b[0] = c_2t2p_0[0];
         trd_c[0] = c_2t2p_0[1];
-        trd_d[0] = c_2t2p_0[4] * gamma_0[k + 1] - c_2t2p_0[5] * f[0][k + 1] - c_2t2p_0[2] * u_k[0] - c_2t2p_0[3] * u_prev[0];
+        trd_d[0] = c_2t2p_0[4] * gamma_0[k + 1] - c_2t2p_0[5] * f[0][k + 1] -
+                   c_2t2p_0[2] * u_k[0] - c_2t2p_0[3] * u_prev[0];
     }
 
     void gen_boundary_0(int k) {
@@ -170,7 +179,9 @@ class hpde_t {
     void gen_boundary_l_2t2p(int k) {
         trd_a.back() = c_2t2p_l[0];
         trd_b.back() = c_2t2p_l[1];
-        trd_d.back() = c_2t2p_0[4] * gamma_l[k + 1] - c_2t2p_0[5] * f[n - 1][k + 1] - c_2t2p_0[2] * u_k[n - 1] + c_2t2p_0[3] * u_prev[n - 1];
+        trd_d.back() = c_2t2p_0[4] * gamma_l[k + 1] -
+                       c_2t2p_0[5] * f[n - 1][k + 1] -
+                       c_2t2p_0[2] * u_k[n - 1] + c_2t2p_0[3] * u_prev[n - 1];
     }
 
     void gen_boundary_l(int k) {
@@ -189,31 +200,40 @@ class hpde_t {
             trd_a[i] = c_impl[0];
             trd_b[i] = c_impl[1];
             trd_c[i] = c_impl[2];
-            trd_d[i] = c_impl[3] * u_k[i] + c_impl[4] * u_prev[i] + c_impl[5] * f[i][k + 1];
+            trd_d[i] = c_impl[3] * u_k[i] + c_impl[4] * u_prev[i] +
+                       c_impl[5] * f[i][k + 1];
         }
         gen_boundary_0(k);
         gen_boundary_l(k);
     }
 
     void boundary_explicit_2t1p(int k) {
-        u_next[0] = (gamma_0[k + 1] - alpha_0 * u_next[1] / h) / (beta_0 - alpha_0 / h);
-        u_next[n - 1] = (gamma_l[k + 1] + alpha_l * u_next[n - 2] / h) / (alpha_l / h + beta_l);
+        u_next[0] =
+            (gamma_0[k + 1] - alpha_0 * u_next[1] / h) / (beta_0 - alpha_0 / h);
+        u_next[n - 1] = (gamma_l[k + 1] + alpha_l * u_next[n - 2] / h) /
+                        (alpha_l / h + beta_l);
     }
 
     void boundary_explicit_3t2p(int k) {
-        double rhs0 = c_3t2p_0[3] * gamma_0[k + 1] - c_3t2p_0[2] * u_next[2] - c_3t2p_0[1] * u_next[1];
+        double rhs0 = c_3t2p_0[3] * gamma_0[k + 1] - c_3t2p_0[2] * u_next[2] -
+                      c_3t2p_0[1] * u_next[1];
         double lhs0 = c_3t2p_0[0];
         u_next[0] = rhs0 / lhs0;
-        double rhsl = c_3t2p_l[3] * gamma_l[k + 1] - c_3t2p_l[0] * u_next[n - 3] - c_3t2p_l[1] * u_next[n - 2];
+        double rhsl = c_3t2p_l[3] * gamma_l[k + 1] -
+                      c_3t2p_l[0] * u_next[n - 3] - c_3t2p_l[1] * u_next[n - 2];
         double lhsl = c_3t2p_l[2];
         u_next[n - 1] = rhsl / lhsl;
     }
 
     void boundary_explicit_2t2p(int k) {
-        double rhs0 = c_2t2p_0[4] * gamma_0[k + 1] - c_2t2p_0[5] * f[0][k + 1] - c_2t2p_0[2] * u_k[0] - c_2t2p_0[3] * u_prev[0] - c_2t2p_0[1] * u_next[1];
+        double rhs0 = c_2t2p_0[4] * gamma_0[k + 1] - c_2t2p_0[5] * f[0][k + 1] -
+                      c_2t2p_0[2] * u_k[0] - c_2t2p_0[3] * u_prev[0] -
+                      c_2t2p_0[1] * u_next[1];
         double lhs0 = c_2t2p_0[0];
         u_next[0] = rhs0 / lhs0;
-        double rhsl = c_2t2p_l[4] * gamma_l[k + 1] - c_2t2p_l[5] * f[n - 1][k + 1] - c_2t2p_l[2] * u_k[n - 1] - c_2t2p_l[3] * u_prev[n - 1] - c_2t2p_l[0] * u_next[n - 2];
+        double rhsl = c_2t2p_l[4] * gamma_l[k + 1] -
+                      c_2t2p_l[5] * f[n - 1][k + 1] - c_2t2p_l[2] * u_k[n - 1] -
+                      c_2t2p_l[3] * u_prev[n - 1] - c_2t2p_l[0] * u_next[n - 2];
         double lhsl = c_2t2p_l[1];
         u_next[n - 1] = rhsl / lhsl;
     }
@@ -228,7 +248,7 @@ class hpde_t {
         }
     }
 
-    static void print_vec(std::ostream & out, const vec & v) {
+    static void print_vec(std::ostream &out, const vec &v) {
         size_t n = v.size();
         for (size_t i = 0; i < n; ++i) {
             if (i) {
@@ -239,8 +259,8 @@ class hpde_t {
         out << '\n';
     }
 
-public:
-    friend std::istream & operator >> (std::istream & in, hpde_t & item) {
+   public:
+    friend std::istream &operator>>(std::istream &in, hpde_t &item) {
         in >> item.n >> item.K >> item.u1_degree >> item.boundary;
         in >> item.l >> item.T >> item.h >> item.tau >> item.theta;
         item.h2 = item.h * item.h;
@@ -286,7 +306,7 @@ public:
         return in;
     }
 
-    void solve(std::ostream & out) {
+    void solve(std::ostream &out) {
         print_vec(out, u_prev);
         prepare_u1();
         prepare_3t2p();
@@ -298,7 +318,7 @@ public:
         }
     }
 
-    void solve_implicit(std::ostream & out) {
+    void solve_implicit(std::ostream &out) {
         precalc_implicit();
         print_vec(out, u_k);
         for (int k = 1; k < K - 1; ++k) {
@@ -311,13 +331,15 @@ public:
         }
     }
 
-    void solve_explicit(std::ostream & out) {
+    void solve_explicit(std::ostream &out) {
         precalc_explicit();
         print_vec(out, u_k);
         for (int k = 1; k < K - 1; ++k) {
             u_next.assign(n, 0);
             for (int i = 1; i < n - 1; ++i) {
-                double rhs = c_expl[1] * u_k[i - 1] + c_expl[2] * u_k[i] + c_expl[3] * u_k[i + 1] + c_expl[4] * u_prev[i] + c_expl[5] * f[i][k];
+                double rhs = c_expl[1] * u_k[i - 1] + c_expl[2] * u_k[i] +
+                             c_expl[3] * u_k[i + 1] + c_expl[4] * u_prev[i] +
+                             c_expl[5] * f[i][k];
                 double lhs = c_expl[0];
                 u_next[i] = rhs / lhs;
             }

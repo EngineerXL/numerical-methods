@@ -2,10 +2,11 @@
 #define ITERATION_HPP
 
 #include <cmath>
+
 #include "../matrix.hpp"
 
 class iter_solver {
-private:
+   private:
     using matrix = matrix_t<double>;
     using vec = std::vector<double>;
 
@@ -14,10 +15,11 @@ private:
     double eps;
 
     static constexpr double INF = 1e18;
-public:
+
+   public:
     int iter_count;
 
-    iter_solver(const matrix & _a, double _eps = 1e-6) {
+    iter_solver(const matrix& _a, double _eps = 1e-6) {
         if (_a.rows() != _a.cols()) {
             throw std::invalid_argument("Matrix is not square");
         }
@@ -26,7 +28,7 @@ public:
         eps = _eps;
     }
 
-    static double norm(const matrix & m) {
+    static double norm(const matrix& m) {
         double res = -INF;
         for (size_t i = 0; i < m.rows(); ++i) {
             double s = 0;
@@ -38,7 +40,7 @@ public:
         return res;
     }
 
-    static double norm(const vec & v) {
+    static double norm(const vec& v) {
         double res = -INF;
         for (double elem : v) {
             res = std::max(res, std::abs(elem));
@@ -46,7 +48,7 @@ public:
         return res;
     }
 
-    std::pair<matrix, vec> precalc_ab(const vec & b, matrix & alpha, vec & beta) {
+    std::pair<matrix, vec> precalc_ab(const vec& b, matrix& alpha, vec& beta) {
         for (size_t i = 0; i < n; ++i) {
             beta[i] = b[i] / a[i][i];
             for (size_t j = 0; j < n; ++j) {
@@ -58,7 +60,7 @@ public:
         return std::make_pair(alpha, beta);
     }
 
-    vec solve_simple(const vec & b) {
+    vec solve_simple(const vec& b) {
         matrix alpha(n);
         vec beta(n);
         precalc_ab(b, alpha, beta);
@@ -78,7 +80,7 @@ public:
         return x;
     }
 
-    vec zeidel(const vec & x, const matrix & alpha, const vec & beta) {
+    vec zeidel(const vec& x, const matrix& alpha, const vec& beta) {
         vec x_k(beta);
         for (size_t i = 0; i < n; ++i) {
             for (size_t j = 0; j < i; ++j) {
@@ -91,7 +93,7 @@ public:
         return x_k;
     }
 
-    vec solve_zeidel(const vec & b) {
+    vec solve_zeidel(const vec& b) {
         matrix alpha(n);
         vec beta(n);
         precalc_ab(b, alpha, beta);

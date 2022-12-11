@@ -1,11 +1,10 @@
 #include <iostream>
+
 #include "integrate.hpp"
 
 using namespace std;
 
-double f(double x) {
-    return (x * x) / (16.0 + x * x);
-}
+double f(double x) { return (x * x) / (16.0 + x * x); }
 
 int main() {
     double l, r;
@@ -32,7 +31,8 @@ int main() {
     cout << endl;
 
     double rect_rr = runge_romberg(rect1, rect2, h2 / h1, 2);
-    cout << "Погрешность вычислений методом прямоугольников: " << rect_rr << endl;
+    cout << "Погрешность вычислений методом прямоугольников: " << rect_rr
+         << endl;
     double trap_rr = runge_romberg(trap1, trap2, h2 / h1, 2);
     cout << "Погрешность вычислений методом трапеций: " << trap_rr << endl;
     double simp_rr = runge_romberg(simp1, simp2, h2 / h1, 2);

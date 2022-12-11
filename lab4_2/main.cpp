@@ -12,13 +12,9 @@ double f(double x, double y, double z) {
     return z;
 }
 
-double px(double x) {
-    return -(2 * x + 1) / x;
-}
+double px(double x) { return -(2 * x + 1) / x; }
 
-double qx(double x) {
-    return (x + 1) / x;
-}
+double qx(double x) { return (x + 1) / x; }
 
 double fx(double x) {
     (void)x;
@@ -46,7 +42,8 @@ int main() {
     cout << "Метод стрельбы:" << endl;
     print_data(sol_shooting);
     cout << "Погрешность вычислений:" << endl;
-    double shooting_err = runge_romberg(de_shooting.solve(h, eps), de_shooting.solve(h / 2, eps), 4);
+    double shooting_err = runge_romberg(de_shooting.solve(h, eps),
+                                        de_shooting.solve(h / 2, eps), 4);
     cout << shooting_err << endl;
 
     fin_dif de_fin_dif(a, b, px, qx, fx, alpha, beta, y0, delta, gamma, y1);
@@ -54,6 +51,7 @@ int main() {
     cout << "Конечно-разностный метод:" << endl;
     print_data(sol_fin_dif);
     cout << "Погрешность вычислений:" << endl;
-    double fin_dif_err = runge_romberg(de_fin_dif.solve(h), de_fin_dif.solve(h / 2), 2);
+    double fin_dif_err =
+        runge_romberg(de_fin_dif.solve(h), de_fin_dif.solve(h / 2), 2);
     cout << fin_dif_err << endl;
 }

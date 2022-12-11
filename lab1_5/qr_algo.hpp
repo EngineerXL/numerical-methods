@@ -3,10 +3,11 @@
 
 #include <cmath>
 #include <complex>
+
 #include "../matrix.hpp"
 
 class qr_algo {
-private:
+   private:
     using matrix = matrix_t<double>;
     using vec = std::vector<double>;
     using complex = std::complex<double>;
@@ -21,7 +22,7 @@ private:
     double eps;
     vec_complex eigen;
 
-    double vtv(const vec & v) {
+    double vtv(const vec& v) {
         double res = 0;
         for (double elem : v) {
             res += elem * elem;
@@ -29,11 +30,9 @@ private:
         return res;
     }
 
-    double norm(const vec & v) {
-        return std::sqrt(vtv(v));
-    }
+    double norm(const vec& v) { return std::sqrt(vtv(v)); }
 
-    matrix vvt(const vec & b) {
+    matrix vvt(const vec& b) {
         size_t n_b = b.size();
         matrix res(n_b);
         for (size_t i = 0; i < n_b; ++i) {
@@ -54,7 +53,7 @@ private:
         }
     }
 
-    matrix householder(const vec & b, int id) {
+    matrix householder(const vec& b, int id) {
         vec v(b);
         v[id] += sign(b[id]) * norm(b);
         return matrix::identity(n) - (2.0 / vtv(v)) * vvt(v);
@@ -92,7 +91,8 @@ private:
     void calc_eigen() {
         for (size_t i = 0; i < n; ++i) {
             if (i < n - 1 and !(abs(a[i + 1][i]) < eps)) {
-                auto [l1, l2] = solve_sq(a[i][i], a[i][i + 1], a[i + 1][i], a[i + 1][i + 1]);
+                auto [l1, l2] = solve_sq(a[i][i], a[i][i + 1], a[i + 1][i],
+                                         a[i + 1][i + 1]);
                 if (std::isnan(l1.real())) {
                     eigen[i] = COMPLEX_INF;
                     ++i;
@@ -145,10 +145,10 @@ private:
         }
     }
 
-public:
+   public:
     int iter_count;
 
-    qr_algo(const matrix & _a, double _eps) {
+    qr_algo(const matrix& _a, double _eps) {
         if (_a.rows() != _a.cols()) {
             throw std::invalid_argument("Matrix is not square");
         }

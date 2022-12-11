@@ -2,10 +2,11 @@
 #define ROTATION_HPP
 
 #include <cmath>
+
 #include "../matrix.hpp"
 
 class rotation {
-private:
+   private:
     using matrix = matrix_t<double>;
     using vec = std::vector<double>;
 
@@ -16,7 +17,7 @@ private:
     double eps;
     matrix v;
 
-    static double norm(const matrix & m) {
+    static double norm(const matrix& m) {
         double res = 0;
         for (size_t i = 0; i < m.rows(); ++i) {
             for (size_t j = 0; j < m.cols(); ++j) {
@@ -69,10 +70,10 @@ private:
         }
     }
 
-public:
+   public:
     int iter_count;
 
-    rotation(const matrix & _a, double _eps) {
+    rotation(const matrix& _a, double _eps) {
         if (_a.rows() != _a.cols()) {
             throw std::invalid_argument("Matrix is not square");
         }
@@ -83,9 +84,7 @@ public:
         build();
     };
 
-    matrix get_eigen_vectors() {
-        return v;
-    }
+    matrix get_eigen_vectors() { return v; }
 
     vec get_eigen_values() {
         vec res(n);
