@@ -26,6 +26,18 @@ std::vector<T> operator-(const std::vector<T>& a, const std::vector<T>& b) {
 }
 
 template <class T>
+std::ostream& operator<<(std::ostream& out, const std::vector<T>& v) {
+    size_t n = v.size();
+    for (size_t i = 0; i < n; ++i) {
+        if (i) {
+            out << ' ';
+        }
+        out << v[i];
+    }
+    return out;
+}
+
+template <class T>
 class matrix_t {
    private:
     using matrix = matrix_t<T>;
@@ -33,6 +45,7 @@ class matrix_t {
 
     size_t n, m;
     std::vector<vec> data;
+    bool comma = true;
 
    public:
     matrix_t() : n(1), m(1), data(1) {}
@@ -45,6 +58,7 @@ class matrix_t {
         n = other.n;
         m = other.m;
         data = other.data;
+        comma = other.comma;
     }
 
     matrix& operator=(const matrix& other) {
@@ -54,8 +68,11 @@ class matrix_t {
         n = other.n;
         m = other.m;
         data = other.data;
+        comma = other.comma;
         return *this;
     }
+
+    void comma_out(bool flag) { comma = flag; }
 
     static matrix identity(size_t n) {
         matrix res(n, n);
@@ -92,6 +109,16 @@ class matrix_t {
         for (size_t i = 0; i < n; ++i) {
             for (size_t j = 0; j < m; ++j) {
                 res[j][i] = data[i][j];
+            }
+        }
+        return res;
+    }
+
+    static matrix uniform(size_t n, size_t m) {
+        matrix res(n, m);
+        for (size_t i = 0; i < n; ++i) {
+            for (size_t j = 0; j < m; ++j) {
+                res[i][j] = 0.1f;
             }
         }
         return res;
@@ -180,7 +207,10 @@ class matrix_t {
         for (size_t i = 0; i < matr.rows(); ++i) {
             for (size_t j = 0; j < matr.cols(); ++j) {
                 if (j) {
-                    out << ", ";
+                    out << ' ';
+                    if (matr.comma) {
+                        out << ',';
+                    }
                 }
                 out << matr[i][j];
             }
