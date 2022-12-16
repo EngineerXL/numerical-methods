@@ -1,6 +1,12 @@
 ### VS Code
 .vscode/
 
+### Lab aux filex
+solution
+solver
+in.txt
+out.txt
+
 ### C++ part
 # Prerequisites
 *.d
@@ -31,11 +37,9 @@
 *.lib
 
 # Executables
-solution
-solver
-# *.exe
-# *.out
-# *.app
+*.exe
+*.out
+*.app
 
 ### Python part
 # Byte-compiled / optimized / DLL files

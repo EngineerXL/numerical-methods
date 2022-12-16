@@ -169,9 +169,7 @@ class epde_t {
             matr u_next(n, m);
             iter(u, u_next);
             u_next = omega * u_next + (1 - omega) * u;
-            // u_next = omega * (u_next - u) + u;
             delta = calc_delta(u, u_next);
-            // std::cout << delta << std::endl;
             u = u_next;
             ++iters;
         }
