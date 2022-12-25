@@ -1,6 +1,8 @@
 #ifndef MINIMAL_SQUARE_HPP
 #define MINIMAL_SQUARE_HPP
 
+#include <functional>
+
 #include "../lab1_1/lu.hpp"
 #include "../polynom.hpp"
 
