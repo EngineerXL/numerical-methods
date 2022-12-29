@@ -128,11 +128,9 @@ class ppde2d_t {
     void trd_x_set_bounds(const int j, const int k) {
         trd_b_x[0] = bound_coefs_0_y[0];
         trd_c_x[0] = bound_coefs_0_y[1];
-        /* Нужно брать среднее, так как шагаем на половину шага */
         trd_d_x[0] = (gamma_0_y(0, j, k) + gamma_0_y(0, j, k + 1)) / 2;
         trd_a_x[nx - 1] = bound_coefs_lx_y[0];
         trd_b_x[nx - 1] = bound_coefs_lx_y[1];
-        /* Нужно брать среднее, так как шагаем на половину шага */
         trd_d_x[nx - 1] = (gamma_lx_y(0, j, k) + gamma_lx_y(0, j, k + 1)) / 2;
     }
 
@@ -147,12 +145,10 @@ class ppde2d_t {
 
     void calc_bounds_x(tensor3d& u_next, const int k) {
         for (int i = 0; i < nx; ++i) {
-            /* Нужно брать среднее, так как шагаем на половину шага */
             double rhs_x_0 = (gamma_x_0(i, 0, k) + gamma_x_0(i, 0, k + 1)) / 2 -
                              bound_coefs_x_0[1] * u_next(i, 1, 0);
             double lhs_x_0 = bound_coefs_x_0[0];
             u_next(i, 0, 0) = rhs_x_0 / lhs_x_0;
-            /* Нужно брать среднее, так как шагаем на половину шага */
             double rhs_x_ly =
                 (gamma_x_ly(i, 0, k) + gamma_x_ly(i, 0, k + 1)) / 2 -
                 bound_coefs_x_ly[0] * u_next(i, ny - 2, 0);
@@ -201,7 +197,6 @@ class ppde2d_t {
                 trd_a_x[i] = coefs_x_1[0];
                 trd_b_x[i] = coefs_x_1[1];
                 trd_c_x[i] = coefs_x_1[2];
-                /* Нужно брать среднее, так как шагаем на половину шага */
                 trd_d_x[i] = coefs_x_1[3] * u_prev(i, j - 1, 0) +
                              coefs_x_1[4] * u_prev(i, j, 0) +
                              coefs_x_1[5] * u_prev(i, j + 1, 0) -
@@ -246,7 +241,6 @@ class ppde2d_t {
                 trd_a_x[i] = coefs_x_2[0];
                 trd_b_x[i] = coefs_x_2[1];
                 trd_c_x[i] = coefs_x_2[2];
-                /* Нужно брать среднее, так как шагаем на половину шага */
                 trd_d_x[i] = coefs_x_2[3] * u_prev(i, j, 0) -
                              0.5 * (f(i, j, k) + f(i, j, k + 1)) / 2;
             }
